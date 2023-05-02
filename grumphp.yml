@@ -1,0 +1,56 @@
+grumphp:
+  hooks_dir: ~
+  hooks_preset: local
+  git_hook_variables:
+    VAGRANT_HOST_DIR: .
+    VAGRANT_PROJECT_DIR: /var/www
+    EXEC_GRUMPHP_COMMAND: exec
+    ENV: { }
+  stop_on_failure: true
+  ignore_unstaged_changes: false
+  hide_circumvention_tip: false
+  process_timeout: 60
+  ascii:
+    failed: grumphp-grumpy.txt
+    succeeded: grumphp-happy.txt
+  parallel:
+    enabled: true
+    max_workers: 32
+  fixer:
+    enabled: true
+    fix_by_default: true
+  environment:
+    files: [ ]
+    variables: { }
+    paths: [ ]
+  tasks:
+    phpmd:
+      whitelist_patterns: [ ]
+      exclude: [ ]
+      report_format: text
+      ruleset: [ 'cleancode', 'codesize', 'naming' ]
+      triggered_by: [ 'php' ]
+    phpcs:
+      standard: PSR12
+      severity: ~
+      error_severity: ~
+      warning_severity: ~
+      tab_width: ~
+      report: full
+      report_width: ~
+      whitelist_patterns: [ ]
+      encoding: ~
+      ignore_patterns: [ ]
+      sniffs: [ ]
+      triggered_by: [ php ]
+      exclude: [ ]
+      show_sniffs_error_path: true
+    phpunit:
+      config_file: ~
+      testsuite: ~
+      group: [ ]
+      exclude_group: [ ]
+      always_execute: false
+      order: null
+  testsuites: [ ]
+  extensions: [ ]
