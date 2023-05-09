@@ -19,4 +19,3 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/status', GetStatusController::class);
 Route::get('/users/{userEmail}', GetUserController::class);
-
