@@ -47,7 +47,7 @@ class GetUserControllerTest extends TestCase
         $this->userDataSource
             ->expects('findByEmail')
             ->with('email@email.com')
-            ->andReturn(new User(1,'email@email.com'));
+            ->andReturn(new User(1, 'email@email.com'));
 
         $response = $this->get('/api/users/email@email.com');
 

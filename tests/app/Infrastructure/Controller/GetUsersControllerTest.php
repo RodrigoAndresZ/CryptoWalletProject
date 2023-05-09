@@ -43,14 +43,11 @@ class GetUsersControllerTest extends Testcase
     {
         $this->userDataSource
             ->expects('getAll')
-            ->andReturn([new User(1,'email@email.com'), new User(2,'another_email@email.com')]);
+            ->andReturn([new User(1, 'email@email.com'), new User(2, 'another_email@email.com')]);
 
         $response = $this->get('/api/users');
 
         $response->assertOk();
         $response->assertExactJson([['id' => '1', 'email' => 'email@email.com'],['id' => '2', 'email' => 'another_email@email.com']]);
-
     }
-
-
 }

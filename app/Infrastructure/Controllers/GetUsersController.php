@@ -20,10 +20,9 @@ class GetUsersController extends BaseController
     public function __invoke(): JsonResponse
     {
         $user = $this->userDataSource->getAll();
-        if($user == []){
+        if ($user == []) {
             return response()->json([
             ], Response::HTTP_OK);
-
         }
         return response()->json([
             [
@@ -34,6 +33,4 @@ class GetUsersController extends BaseController
                 'email' => 'another_email@email.com',
             ]], Response::HTTP_OK);
     }
-
-
 }

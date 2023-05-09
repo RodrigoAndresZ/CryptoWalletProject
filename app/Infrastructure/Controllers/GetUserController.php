@@ -19,7 +19,7 @@ class GetUserController extends BaseController
     public function __invoke(string $userEmail): JsonResponse
     {
         $user = $this->userDataSource->findByEmail($userEmail);
-        if (is_null($user)){
+        if (is_null($user)) {
             return response()->json([
                 'error' => 'usuario no encontrado'
             ], Response::HTTP_NOT_FOUND);

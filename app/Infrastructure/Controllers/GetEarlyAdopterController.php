@@ -19,13 +19,11 @@ class GetEarlyAdopterController extends BaseController
     public function __invoke(string $userEmail): JsonResponse
     {
         $user = $this->userDataSource->findByEmail($userEmail);
-        if (is_null($user)){
+        if (is_null($user)) {
             return response()->json([
                 'error' => 'usuario no encontrado'
             ], Response::HTTP_NOT_FOUND);
-        }
-
-        else {
+        } else {
             if ($user->getId() < 1000) {
                 return response()->json([
                     'El usuario es early adopter'
@@ -35,8 +33,6 @@ class GetEarlyAdopterController extends BaseController
             return response()->json([
                 'El usuario no es early adopter'
             ], Response::HTTP_OK);
-
         }
     }
-
 }
