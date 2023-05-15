@@ -20,5 +20,17 @@ final class CoinTest extends TestCase
         $this->assertEquals(200, $result);
     }
 
+    /**
+     * @test
+     */
+    public function shouldSellCoin()
+    {
+        $coin = new Coin(1,1,0);
+
+        $result = $coin->buy(1,1,100);
+
+        $this->assertEquals(200, $result);
+    }
+
 
 }

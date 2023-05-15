@@ -58,4 +58,20 @@ class Coin
     {
         return 200;
     }
+
+
+    /**
+     * @return int
+     *
+     * 200 - successful operation
+     * 400 - bad request error
+     * 404 - A coin with the specified ID was not found.
+     *
+     */
+
+    public function sell(string $coin_id, string $wallet_id, float $amount_usd): int
+    {
+        return 200;
+    }
+
 }
