@@ -7,7 +7,7 @@ class Coin
     private string $coin_id;
     private string $wallet_id;
 
-    private double $amount_usd;
+    private float $amount_usd;
 
     /**
      * @param string $coin_id
@@ -43,5 +43,19 @@ class Coin
     public function getAmountUsd(): float
     {
         return $this->amount_usd;
+    }
+
+    /**
+     * @return int
+     *
+     * 200 - successful operation
+     * 400 - bad request error
+     * 404 - A coin with the specified ID was not found.
+     *
+     */
+
+    public function buy(string $coin_id, string $wallet_id, float $amount_usd): int
+    {
+        return 200;
     }
 }
