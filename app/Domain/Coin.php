@@ -54,9 +54,10 @@ class Coin
      *
      */
 
-    public function buy(string $coin_id, string $wallet_id, float $amount_usd): int
+    public function buy(string $coin_id, string $wallet_id, float $amount_usd): float
     {
-        return 200;
+        $this->amount_usd += $amount_usd;
+        return $this->amount_usd;
     }
 
 
@@ -71,7 +72,8 @@ class Coin
 
     public function sell(string $coin_id, string $wallet_id, float $amount_usd): int
     {
-        return 200;
+        $this->amount_usd -= $amount_usd;
+        return $this->amount_usd;
     }
 
 }
