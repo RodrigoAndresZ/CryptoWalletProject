@@ -64,6 +64,7 @@ class Coin
     /**
      * @return int
      *
+     * Vende monedas y descuenta la cantidad vendida
      * 200 - successful operation
      * 400 - bad request error
      * 404 - A coin with the specified ID was not found.
