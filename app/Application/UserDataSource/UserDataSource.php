@@ -4,9 +4,11 @@ namespace App\Application\UserDataSource;
 
 use App\Domain\User;
 
-Interface UserDataSource
+interface UserDataSource
 {
-    public function findByEmail(string $email): User;
+    public function findByEmail(string $email): ?User;
+
+    public function findUserbyId(string $user_id): ?User;
 
     /**
      * @return User[]

@@ -24,7 +24,7 @@ class GetEarlyAdopterController extends BaseController
                 'error' => 'usuario no encontrado'
             ], Response::HTTP_NOT_FOUND);
         }
-        if ($user->getId() < 1000) {
+        if ($user->getUserId() < 1000) {
             return response()->json([
                 'El usuario es early adopter'
             ], Response::HTTP_OK);

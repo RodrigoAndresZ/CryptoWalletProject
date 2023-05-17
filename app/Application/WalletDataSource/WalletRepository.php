@@ -2,6 +2,9 @@
 
 namespace App\Application\WalletDataSource;
 
-class WalletRepository
+use App\Domain\Wallet;
+
+interface WalletRepository
 {
+    public function create(string $user_id): ?Wallet;
 }
