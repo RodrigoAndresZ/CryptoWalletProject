@@ -10,9 +10,9 @@ class Wallet
 
     private string $name;
     private string $symbol;
-    private double $amount;
-    private double $value_usd;
-    private double $balance_usd;
+    private float $amount;
+    private float $value_usd;
+    private float $balance_usd;
 
     public function __construct(
         string $user_id,

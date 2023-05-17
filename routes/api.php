@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/status', GetStatusController::class);
 Route::get('/users/{userEmail}', GetUserController::class);
+//Route::get('/coin/buy/{coin_id}/{wallet_id}/{amount_usd}', BuyCoinController::class);
 
 //Route::post('/wallet/open', CreateWalletController::class);
 
-// Route::get('/wallet/{wallet_id}', GetUserController::class);
+Route::get('/wallet/{wallet_id}',\App\Infrastructure\Controllers\GetWalletController::class);
