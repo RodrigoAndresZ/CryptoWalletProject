@@ -2,16 +2,16 @@
 
 namespace App\Infrastructure\Controllers;
 
-use App\Application\UserDataSource\UserDataSource;
+use App\Application\UserDataSource\UserRepository;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class GetEarlyAdopterController extends BaseController
 {
-    private UserDataSource $userDataSource;
+    private UserRepository $userDataSource;
 
-    public function __construct(UserDataSource $userDataSource, UserDataSource $localUserDataSource)
+    public function __construct(UserRepository $userDataSource, UserRepository $localUserDataSource)
     {
         $this->userDataSource = $userDataSource;
     }
@@ -23,16 +23,15 @@ class GetEarlyAdopterController extends BaseController
             return response()->json([
                 'error' => 'usuario no encontrado'
             ], Response::HTTP_NOT_FOUND);
-        } else {
-            if ($user->getId() < 1000) {
-                return response()->json([
-                    'El usuario es early adopter'
-                ], Response::HTTP_OK);
-            }
-
+        }
+        if ($user->getUserId() < 1000) {
             return response()->json([
-                'El usuario no es early adopter'
+                'El usuario es early adopter'
             ], Response::HTTP_OK);
         }
+
+        return response()->json([
+            'El usuario no es early adopter'
+        ], Response::HTTP_OK);
     }
 }
