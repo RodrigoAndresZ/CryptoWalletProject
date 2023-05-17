@@ -11,7 +11,7 @@ class GetUserController extends BaseController
 {
     private UserRepository $userDataSource;
 
-    public function __construct(UserRepository $userDataSource, UserRepository $localUserDataSource)
+    public function __construct(UserRepository $userDataSource)
     {
         $this->userDataSource = $userDataSource;
     }
