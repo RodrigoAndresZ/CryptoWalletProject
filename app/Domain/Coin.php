@@ -4,10 +4,10 @@ namespace App\Domain;
 
 class Coin
 {
-    private string $coin_id;
-    private string $wallet_id;
+private string $coin_id;
+private string $wallet_id;
 
-<<<<<<< HEAD
+<<  << <<< HEAD
 
 
     private double $amount_usd;

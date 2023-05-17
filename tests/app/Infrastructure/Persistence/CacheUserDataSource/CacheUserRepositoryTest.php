@@ -2,7 +2,6 @@
 
 namespace app\Infrastructure\Persistence\CacheUserDataSource;
 
-use App\Application\UserDataSource\UserDataSource;
 use App\Application\UserDataSource\UserRepository;
 use App\Domain\User;
 use Mockery;
@@ -10,13 +9,13 @@ use Tests\TestCase;
 
 class CacheUserRepositoryTest extends TestCase
 {
-    private UserDataSource $userDataSource;
+    private UserRepository $userDataSource;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->userDataSource = $this->mock(UserDataSource::class);
-        $this->app->bind(UserDataSource::class, function () {
+        $this->userDataSource = $this->mock(UserRepository::class);
+        $this->app->bind(UserRepository::class, function () {
             return $this->userDataSource;
         });
     }
