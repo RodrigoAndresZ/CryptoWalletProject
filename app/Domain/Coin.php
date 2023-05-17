@@ -7,9 +7,13 @@ class Coin
     private string $coin_id;
     private string $wallet_id;
 
+<<<<<<< HEAD
 
 
     private double $amount_usd;
+=======
+    private float $amount_usd;
+>>>>>>> coinbuy-coinsell
 
     /**
      * @param string $coin_id
@@ -46,4 +50,37 @@ class Coin
     {
         return $this->amount_usd;
     }
+
+    /**
+     * @return int
+     *
+     * 200 - successful operation
+     * 400 - bad request error
+     * 404 - A coin with the specified ID was not found.
+     *
+     */
+
+    public function buy(string $coin_id, string $wallet_id, float $amount_usd): float
+    {
+        $this->amount_usd += $amount_usd;
+        return $this->amount_usd;
+    }
+
+
+    /**
+     * @return int
+     *
+     * Vende monedas y descuenta la cantidad vendida
+     * 200 - successful operation
+     * 400 - bad request error
+     * 404 - A coin with the specified ID was not found.
+     *
+     */
+
+    public function sell(string $coin_id, string $wallet_id, float $amount_usd): int
+    {
+        $this->amount_usd -= $amount_usd;
+        return $this->amount_usd;
+    }
+
 }
