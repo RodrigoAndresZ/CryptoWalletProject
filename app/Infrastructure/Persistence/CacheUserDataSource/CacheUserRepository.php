@@ -2,12 +2,11 @@
 
 namespace App\Infrastructure\Persistence\CacheUserDataSource;
 
-use App\Application\UserDataSource\UserDataSource;
 use App\Application\UserDataSource\UserRepository;
 use App\Domain\User;
 use Illuminate\Support\Facades\Cache;
 
-class CacheUserRepository implements UserDataSource
+class CacheUserRepository implements UserRepository
 {
     public function findUserbyId(string $user_id): ?User
     {
