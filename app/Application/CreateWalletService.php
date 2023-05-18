@@ -2,28 +2,40 @@
 
 namespace App\Application;
 
+use App\Application\Exceptions\UserNotFoundException;
 use App\Application\UserDataSource\UserRepository;
 use App\Application\WalletDataSource\WalletRepository;
+use App\Domain\User;
+use App\Domain\Wallet;
+use App\Infrastructure\Persistence\CacheUserDataSource\CacheUserRepository;
+use App\Infrastructure\Persistence\CacheWalletDataSource\CacheWalletRepository;
 
 class CreateWalletService
 {
-    private UserRepository $userDataSource;
-    private WalletRepository $walletDataSource;
+    private UserRepository $UserRepository;
+    private WalletRepository $WalletRepository;
 
-    public function __construct(UserRepository $userDataSource)
+    public function __construct(UserRepository $UserRepository, WalletRepository $WalletRepository)
     {
-        $this->userDataSource = $userDataSource;
+        $this->UserRepository = $UserRepository;
+        $this->WalletRepository = $WalletRepository;
     }
 
-    /**
-     * @return Wallet[]
-     */
-    public function execute(string $user_id): array
-    {
-        $users = $this->userDataSource->getAll();
 
-        return array_filter($users, function ($user) {
-            return ($user->getId() % 2 == 0 || $user->getId() % 5 == 0);
-        });
+    /**
+     * @throws UserNotFoundException
+     */
+    public function execute(string $user_id): wallet
+    {
+        $user = $this->UserRepository->findUserById($user_id);
+        if (is_null($user)) {
+            throw new UserNotFoundException();
+        }
+
+        $wallet = $this->WalletRepository->create($user_id);
+
+
+
+        return $wallet ;
     }
 }
