@@ -1,12 +1,12 @@
 <?php
 
-use App\Infrastructure\Controllers\CreateWalletFormRequest;
+use App\Infrastructure\Controllers\CreateWalletController;
+use App\Infrastructure\Controllers\GetStatusController;
 use App\Infrastructure\Controllers\GetUserController;
 use App\Infrastructure\Controllers\GetWalletController;
-//use App\Infrastructure\Controllers\IsEarlyAdopterUserController;
-use App\Infrastructure\Controllers\GetStatusController;
-use App\Infrastructure\Persistence\CreateWalletController;
 use Illuminate\Support\Facades\Route;
+
+//use App\Infrastructure\Controllers\IsEarlyAdopterUserController;
 
 /*
 |--------------------------------------------------------------------------

@@ -26,7 +26,6 @@ class CacheWalletRepositoryTest extends TestCase
      */
     public function getsWalletTest()
     {
-
         $this->walletRepository
             ->expects('findWalletById')
             ->with('1')
@@ -34,7 +33,7 @@ class CacheWalletRepositoryTest extends TestCase
 
         $response = $this->get('/api/wallet/1');
 
-//        $response->assertOk();
+        //$response->assertOk();
         $response->assertExactJson(['user_id' => '1',
             'wallet_id' => '1',
             'coin_id' => '1',

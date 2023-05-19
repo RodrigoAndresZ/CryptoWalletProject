@@ -2,10 +2,10 @@
 
 namespace app\Application;
 
+use App\Application\Exceptions\UserNotFoundException;
 use App\Application\UserDataSource\UserRepository;
 use App\Application\WalletDataSource\WalletRepository;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use Mockery\MockInterface;
+use App\Domain\User;
 use Tests\TestCase;
 
 class CreateWalletServiceTest extends TestCase
@@ -20,12 +20,47 @@ class CreateWalletServiceTest extends TestCase
         $this->userRepository = $this->mock(UserRepository::class);
         $this->walletRepository = $this->mock(WalletRepository::class);
         $this->createWalletService = new CreateWalletService($this->userRepository, $this->walletRepository);
-        /*
-
-                $this->app->bind(CreateWalletService::class,  function () {
-            return $this->createWalletService;
-        });
-
-         */
     }
+
+    /**
+     * @test
+     */
+    public function createWalletServiceNoUserTest()
+    {
+        $user_id = '99';
+
+        $this->userRepository
+            ->expects('findUserById')
+            ->with($user_id)
+            ->andReturnNull();
+
+        $this->expectException(UserNotFoundException::class);
+        $user = $this->createWalletService->execute($user_id);
+    }
+
+    /**
+     * @test
+     */
+    public function createWalletFromServiceUserTest()
+    {
+        $user_id = '1';
+        $this->userRepository
+            ->expects('findUserById')
+            ->with($user_id)
+            ->andReturn(new User(1, "email@email.com"));
+
+        $wallet_id = "1";
+        $this->walletRepository
+            ->expects('create')
+            ->with($user_id)
+            ->andReturn($wallet_id);
+
+        $result = $this->createWalletService->execute($user_id);
+
+        $this->assertEquals($wallet_id, $result);
+    }
+
+
+
+
 }

@@ -25,7 +25,7 @@ class CreateWalletService
     /**
      * @throws UserNotFoundException
      */
-    public function execute(string $user_id): wallet
+    public function execute(string $user_id): string
     {
         $user = $this->UserRepository->findUserById($user_id);
         if (is_null($user)) {
@@ -33,9 +33,6 @@ class CreateWalletService
         }
 
         $wallet = $this->WalletRepository->create($user_id);
-
-
-
-        return $wallet ;
+        return $wallet->getWalletId() ;
     }
 }

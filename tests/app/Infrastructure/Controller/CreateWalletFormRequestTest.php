@@ -2,6 +2,11 @@
 
 namespace Tests\app\Infrastructure\Controller;
 
-class CreateWalletFormRequestTest
+use Tests\TestCase;
+
+class CreateWalletFormRequestTest extends TestCase
 {
+
+
+
 }
