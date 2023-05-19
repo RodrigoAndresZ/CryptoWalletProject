@@ -37,10 +37,9 @@ class CreateWalletControllerTest extends TestCase
 
         $response = $this->postJson('/api/wallet/open', $json);
 
-        //$response->assertBadRequest();
         $response->assertExactJson([
             "message" => 'El campo user_id es requerido.',
-            'errors' =>[
+            'errors' => [
                 'user_id' => ['El campo user_id es requerido.']
             ]
         ]);
@@ -57,7 +56,7 @@ class CreateWalletControllerTest extends TestCase
 
         $response->assertExactJson([
             "message" => 'El campo user_id debe ser un string.',
-            'errors' =>[
+            'errors' => [
                 'user_id' => ['El campo user_id debe ser un string.']
             ]
         ]);

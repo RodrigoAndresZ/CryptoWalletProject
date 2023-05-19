@@ -25,5 +25,4 @@ class CreateWalletFormRequest extends FormRequest
             'user_id.string' => 'El campo user_id debe ser un string.',
         ];
     }
-
 }
