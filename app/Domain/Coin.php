@@ -5,43 +5,44 @@ namespace App\Domain;
 class Coin
 {
     private string $coin_id;
-    private string $wallet_id;
 
-    private double $amount_usd;
+    private string $name;
 
-    /**
-     * @param string $coin_id
-     * @param string $wallet_id
-     * @param float $amount_usd
-     */
-    public function __construct(string $coin_id, string $wallet_id, float $amount_usd)
+    private string $symbol;
+
+    private float $amount;
+
+    private float $value_usd;
+
+    public function __construct(string $coin_id, string $symbol, string $name, float $value_usd)
     {
         $this->coin_id = $coin_id;
-        $this->wallet_id = $wallet_id;
-        $this->amount_usd = $amount_usd;
+        $this->symbol = $symbol;
+        $this->name = $name;
+
+        $this->value_usd = $value_usd;
     }
 
-    /**
-     * @return string
-     */
     public function getCoinId(): string
     {
         return $this->coin_id;
     }
 
-    /**
-     * @return string
-     */
-    public function getWalletId(): string
+    public function getSymbol(): string
     {
-        return $this->wallet_id;
+        return $this->symbol;
+    }
+    public function getName(): string
+    {
+        return $this->name;
     }
 
-    /**
-     * @return float
-     */
-    public function getAmountUsd(): float
+    public function getAmount(): float
     {
-        return $this->amount_usd;
+        return $this->amount;
+    }
+    public function getValueUsd(): float
+    {
+        return $this->value_usd;
     }
 }

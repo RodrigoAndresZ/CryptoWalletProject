@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Controllers;
 
-use App\Application\UserDataSource\UserDataSource;
+use App\Application\DataSource\UserDataSource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
@@ -26,7 +26,7 @@ class GetUserController extends BaseController
         }
 
         return response()->json([
-            'id' => $user->getId(),
+            'id' => $user->getIdUser(),
             'email' => $user->getEmail()
         ], Response::HTTP_OK);
     }

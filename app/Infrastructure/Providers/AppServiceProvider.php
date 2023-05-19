@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Providers;
 
-use App\Application\UserDataSource\UserDataSource;
+use App\Application\DataSource\UserDataSource;
 use App\DataSource\Database\EloquentUserDataSource;
 use Illuminate\Support\ServiceProvider;
 
