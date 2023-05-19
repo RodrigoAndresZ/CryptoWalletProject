@@ -62,8 +62,4 @@ class CreateWalletServiceTest extends TestCase
 
         $this->assertEquals($wallet_id, $result);
     }
-
-
-
-
 }
