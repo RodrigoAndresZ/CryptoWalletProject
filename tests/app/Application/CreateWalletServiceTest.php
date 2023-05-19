@@ -5,7 +5,9 @@ namespace app\Application;
 use App\Application\Exceptions\UserNotFoundException;
 use App\Application\UserDataSource\UserRepository;
 use App\Application\WalletDataSource\WalletRepository;
+use App\Application\CreateWalletService;
 use App\Domain\User;
+use App\Domain\Wallet;
 use Tests\TestCase;
 
 class CreateWalletServiceTest extends TestCase
@@ -50,10 +52,11 @@ class CreateWalletServiceTest extends TestCase
             ->andReturn(new User(1, "email@email.com"));
 
         $wallet_id = "1";
+        $wallet = new Wallet(1, 1, 1, 1, 1, 1, 1, 1);
         $this->walletRepository
             ->expects('create')
             ->with($user_id)
-            ->andReturn($wallet_id);
+            ->andReturn($wallet);
 
         $result = $this->createWalletService->execute($user_id);
 
