@@ -18,15 +18,10 @@ class CreateWalletController extends BaseController
         $this->createWalletService = $createWalletService;
     }
 
-    public function __invoke(Request $CreateWalletRequest): JsonResponse
+    public function __invoke(CreateWalletFormRequest $request): JsonResponse
     {
-        $jsonData = $CreateWalletRequest->json()->all();
+        $jsonData = $request->json()->all();
 
-        if (!isset($jsonData['user_id'])) {
-            return response()->json([
-                'error' => "parámetros incorrectos"
-            ], Response::HTTP_BAD_REQUEST);
-        }
         $user_id = $jsonData['user_id'];
 
         try {

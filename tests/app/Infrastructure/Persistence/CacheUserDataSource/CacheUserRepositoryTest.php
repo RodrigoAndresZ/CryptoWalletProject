@@ -1,10 +1,9 @@
 <?php
 
-namespace app\Infrastructure\Persistence\CacheUserDataSource;
+namespace Tests\app\Infrastructure\Persistence\CacheUserDataSource;
 
 use App\Application\UserDataSource\UserRepository;
 use App\Domain\User;
-use Mockery;
 use Tests\TestCase;
 
 class CacheUserRepositoryTest extends TestCase
