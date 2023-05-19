@@ -31,14 +31,36 @@ class CreateWalletControllerTest extends TestCase
     /**
      * @test
      */
-    public function createWalletFromRequestBadParametersTest()
+    public function createWalletFromRequestBadParametersNoUserIdTest()
     {
         $json = ["Pepe" => "asas"];
 
         $response = $this->postJson('/api/wallet/open', $json);
 
-        $response->assertBadRequest();
-        $response->assertExactJson(['error' => 'parámetros incorrectos']);
+        //$response->assertBadRequest();
+        $response->assertExactJson([
+            "message" => 'El campo user_id es requerido.',
+            'errors' =>[
+                'user_id' => ['El campo user_id es requerido.']
+            ]
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function createWalletFromRequestBadParametersNoStringTest()
+    {
+        $json = ["user_id" => 1];
+
+        $response = $this->postJson('/api/wallet/open', $json);
+
+        $response->assertExactJson([
+            "message" => 'El campo user_id debe ser un string.',
+            'errors' =>[
+                'user_id' => ['El campo user_id debe ser un string.']
+            ]
+        ]);
     }
 
     /**

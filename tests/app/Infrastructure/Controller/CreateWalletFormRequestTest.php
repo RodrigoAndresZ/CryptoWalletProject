@@ -6,7 +6,4 @@ use Tests\TestCase;
 
 class CreateWalletFormRequestTest extends TestCase
 {
-
-
-
 }
