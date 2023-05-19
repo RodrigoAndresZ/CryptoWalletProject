@@ -5,6 +5,7 @@ namespace app\Application;
 use App\Application\Exceptions\UserNotFoundException;
 use App\Application\UserDataSource\UserRepository;
 use App\Application\WalletDataSource\WalletRepository;
+use App\Application\CreateWalletService;
 use App\Domain\User;
 use App\Domain\Wallet;
 use Tests\TestCase;

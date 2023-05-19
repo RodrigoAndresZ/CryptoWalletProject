@@ -7,7 +7,7 @@ use App\Domain\Wallet;
 
 class CacheWalletRepository implements WalletRepository
 {
-    public function create(string $user_id): ?Wallet
+    public function create(string $user_id): Wallet
     {
         return new Wallet(1, 1, 1, 1, 1, 1, 1, 1);
     }
