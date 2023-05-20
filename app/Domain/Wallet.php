@@ -50,4 +50,24 @@ class Wallet
     {
         array_push($this->coins, $coin);
     }
+    public function deleteCoin(Coin $coin): void
+    {
+        for($i = 0; $i < sizeof($this->coins); $i++) {
+            if($this->coins[$i]->getCoinId() == $coin->getCoinId()){
+                unset($this->coins[$i]);
+                return;
+            }
+        }
+        return;
+    }
+    public function updateCoin(Coin $coin): void
+    {
+        for($i = 0; $i < sizeof($this->coins); $i++) {
+            if($this->coins[$i]->getCoinId() == $coin->getCoinId()){
+                $this->coins[$i] = $coin;
+                return;
+            }
+        }
+        return;
+    }
 }
