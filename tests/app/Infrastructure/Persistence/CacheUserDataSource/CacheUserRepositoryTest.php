@@ -4,6 +4,7 @@ namespace Tests\app\Infrastructure\Persistence\CacheUserDataSource;
 
 use App\Application\UserDataSource\UserRepository;
 use App\Domain\User;
+use App\Infrastructure\Persistence\CacheUserDataSource\CacheUserRepository;
 use Tests\TestCase;
 
 class CacheUserRepositoryTest extends TestCase
@@ -12,65 +13,33 @@ class CacheUserRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-        $this->userDataSource = $this->mock(UserRepository::class);
-        $this->app->bind(UserRepository::class, function () {
-            return $this->userDataSource;
-        });
+        $this->userDataSource = new CacheUserRepository();
     }
 
     /**
      * @test
      */
-    public function userWithGivenUserIdDoesNotExist()
+    public function userWithGivenUserIdDoesNotExistTest()
     {
+        $expect = new User(1, "email@email.com");
 
-        $this->userDataSource
-            ->expects('findByUserId')
-            ->with('1')
-            ->andReturnNull();
+        $user = $this->userDataSource->findUserById('2');
 
-        $response = $this->get('/api/users/email@email.com');
-
-        //$response->assertNotFound();
-        $response->assertExactJson(['error' => 'usuario no encontrado']);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expect, $user);
     }
-
-
 
     /**
      * @test
      */
-    public function userWithGivenEmailDoesNotExist()
+    public function userWithGivenEmailDoesNotExistTest()
     {
+        $expect = new User(2, "email@email.com");
 
-        $this->userDataSource
-            ->expects('findByEmail')
-            ->with('email@email.com')
-            ->andReturnNull();
+        $user = $this->userDataSource->findByEmail('em@email.com');
 
-        $response = $this->get('/api/users/email@email.com');
-
-        //$response->assertNotFound();
-        $response->assertExactJson(['error' => 'usuario no encontrado']);
-    }
-
-
-    /**
-     * @test
-     */
-    public function getsUserTest()
-    {
-
-        $this->userDataSource
-            ->expects('findByUserId')
-            ->with('1')
-            ->andReturn(new User(1, 'email@email.com'));
-
-        $response = $this->get('/api/user/1');
-
-        $response->assertOk();
-        $response->assertExactJson(['id' => 1, 'email' => 'email@email.com']);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expect, $user);
     }
 
 
@@ -79,15 +48,24 @@ class CacheUserRepositoryTest extends TestCase
      */
     public function getsUserByIdTest()
     {
+        $expect = new User(1, "email@email.com");
 
-        $this->userDataSource
-            ->expects('findByEmail')
-            ->with('email@email.com')
-            ->andReturn(new User(1, 'email@email.com'));
+        $user = $this->userDataSource->findUserById('1');
 
-        $response = $this->get('/api/users/email@email.com');
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expect, $user);
+    }
 
-        $response->assertOk();
-        $response->assertExactJson(['id' => 1, 'email' => 'email@email.com']);
+    /**
+     * @test
+     */
+    public function getsUserByEmailTest()
+    {
+        $expect = new User(2, "email@email.com");
+
+        $user = $this->userDataSource->findByEmail('email@email.com');
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expect, $user);
     }
 }
