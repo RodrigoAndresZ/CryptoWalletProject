@@ -46,21 +46,20 @@ class GetWalletBalanceControllerTest extends TestCase
         $coin_id = '90';
         $coins = new Coin($coin_id, 'BTC', 'Bitcoin', 1, 30000);
         $coin_id2 = '91';
-        $coins2 = new Coin($coin_id2, 'BTC', 'Bitcoin', 1, 30000);
+        $coins2 = new Coin($coin_id2, 'BTC', 'Bitcoin', 2, 30000);
 
         $this->walletRepository
             ->expects('findWalletById')
             ->with($wallet_id)
             ->andReturn(new Wallet('1', '1', [
-                $coins->getJson(),
-                $coins2->getJson()
+                $coins,
+                $coins2
             ]));
 
         $response = $this->get("/api/wallet/$wallet_id/balance");
         $response->assertOk();
         $response->assertExactJson([
-            "balance_usd" => 60000
+            "balance_usd" => 90000
         ]);
     }
-
 }

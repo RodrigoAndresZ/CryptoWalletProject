@@ -30,15 +30,25 @@ class Wallet
 
     public function getCoins(): array
     {
-        return $this->coins;
+        $CoinsJson = [];
+        foreach ($this->coins as $coin) {
+            array_push($CoinsJson, $coin->getJson());
+        }
+
+        return $CoinsJson;
     }
 
     public function getBalance(): float
     {
         $balance = 0;
-        foreach ($this->coins as $coin_id => $coinJson){
+        foreach ($this->getCoins() as $coinJson) {
             $balance += $coinJson['amount'] * $coinJson['value_usd'];
         }
         return $balance;
     }
+    public function addCoin(Coin $coin): void
+    {
+        array_push($this->coins, $coin->getJson());
+    }
+
 }
