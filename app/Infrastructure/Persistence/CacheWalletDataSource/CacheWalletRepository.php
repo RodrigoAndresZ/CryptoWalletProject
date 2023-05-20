@@ -18,8 +18,7 @@ class CacheWalletRepository implements WalletRepository
         //return Cache::get($wallet_id);
 
         $coins = new Coin(90, 'BTC', 'Bitcoin', 0, 30000);
-        return new Wallet(1, $wallet_id, [
-            '90' => $coins->getJson()
-        ]);
+        return new Wallet(1, $wallet_id, $coins->getJson()
+        );
     }
 }

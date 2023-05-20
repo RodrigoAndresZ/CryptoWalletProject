@@ -32,4 +32,13 @@ class Wallet
     {
         return $this->coins;
     }
+
+    public function getBalance(): float
+    {
+        $balance = 0;
+        foreach ($this->coins as $coin_id => $coinJson){
+            $balance += $coinJson['amount'] * $coinJson['value_usd'];
+        }
+        return $balance;
+    }
 }

@@ -38,13 +38,11 @@ class CacheWalletRepositoryTest extends TestCase
     public function getsWalletTest()
     {
         $expect = new Wallet('1', '1', [
-            '90' => [
                 "coin_id" => '90',
                 "name" => 'Bitcoin',
                 "symbol" => 'BTC',
                 "amount" => 0,
                 "value_usd" => 30000
-            ]
         ]);
 
         $wallet = $this->walletRepository->findWalletById('1');

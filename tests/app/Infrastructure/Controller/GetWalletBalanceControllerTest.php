@@ -7,7 +7,7 @@ use App\Domain\Coin;
 use App\Domain\Wallet;
 use Tests\TestCase;
 
-class GetWalletControllerTest extends TestCase
+class GetWalletBalanceControllerTest extends TestCase
 {
     private WalletRepository $walletRepository;
 
@@ -23,7 +23,7 @@ class GetWalletControllerTest extends TestCase
     /**
      * @test
      */
-    public function getWalletNoWalletIdTest()
+    public function getWalletBalanceNoWalletIdTest()
     {
         $wallet_id = "2";
 
@@ -32,7 +32,7 @@ class GetWalletControllerTest extends TestCase
             ->with($wallet_id)
             ->andReturn(null);
 
-        $response = $this->get("/api/wallet/$wallet_id");
+        $response = $this->get("/api/wallet/$wallet_id/balance");
         $response->assertNotFound();
         $response->assertExactJson(['error' => 'cartera no encontrado']);
     }
@@ -40,26 +40,27 @@ class GetWalletControllerTest extends TestCase
     /**
      * @test
      */
-    public function getWalletTest()
+    public function getWalletBalanceTest()
     {
         $wallet_id = '1';
-        $coins = new Coin(90, 'BTC', 'Bitcoin', 0, 30000);
+        $coin_id = '90';
+        $coins = new Coin($coin_id, 'BTC', 'Bitcoin', 1, 30000);
+        $coin_id2 = '91';
+        $coins2 = new Coin($coin_id2, 'BTC', 'Bitcoin', 1, 30000);
 
         $this->walletRepository
             ->expects('findWalletById')
             ->with($wallet_id)
-            ->andReturn(new Wallet('1', '1',
-                $coins->getJson()
-            ));
+            ->andReturn(new Wallet('1', '1', [
+                $coins->getJson(),
+                $coins2->getJson()
+            ]));
 
-        $response = $this->get("/api/wallet/$wallet_id");
+        $response = $this->get("/api/wallet/$wallet_id/balance");
         $response->assertOk();
         $response->assertExactJson([
-                "coin_id" => '90',
-                "name" => 'Bitcoin',
-                "symbol" => 'BTC',
-                "amount" => 0,
-                "value_usd" => 30000
+            "balance_usd" => 60000
         ]);
     }
+
 }

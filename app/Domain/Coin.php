@@ -56,5 +56,4 @@ class Coin
             "value_usd" => $this->value_usd
         ];
     }
-
 }
