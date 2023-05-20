@@ -28,11 +28,6 @@ class GetWalletController extends BaseController
 
 
         //si se encuentra la wallet devolvemos todos sus datos
-        return response()->json([
-            'user_id' => $wallet->getUserId(),
-            'wallet_id' => $wallet->getWalletId(),
-            'coins' => $wallet->getCoins()
-
-        ], Response::HTTP_OK);
+        return response()->json($wallet->getCoins(), Response::HTTP_OK);
     }
 }

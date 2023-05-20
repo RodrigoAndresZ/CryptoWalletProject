@@ -11,7 +11,6 @@ class Wallet
     public function __construct(
         string $user_id,
         string $wallet_id,
-
         array $coins
     ) {
         $this->user_id = $user_id;
@@ -33,5 +32,4 @@ class Wallet
     {
         return $this->coins;
     }
-
 }
