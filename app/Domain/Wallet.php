@@ -48,7 +48,6 @@ class Wallet
     }
     public function addCoin(Coin $coin): void
     {
-        array_push($this->coins, $coin->getJson());
+        array_push($this->coins, $coin);
     }
-
 }
