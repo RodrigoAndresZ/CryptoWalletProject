@@ -31,12 +31,8 @@ class GetWalletController extends BaseController
         return response()->json([
             'user_id' => $wallet->getUserId(),
             'wallet_id' => $wallet->getWalletId(),
-            'coin_id' => $wallet->getCoinId(),
-            'name' => $wallet->getName(),
-            'symbol' => $wallet->getSymbol(),
-            'amount' => $wallet->getAmount(),
-            'value_usd' => $wallet->getValueUsd(),
-            'balance_usd' => $wallet->getBalanceUsd()
+            'coins' => $wallet->getCoins()
+
         ], Response::HTTP_OK);
     }
 }

@@ -3,6 +3,7 @@
 namespace app\Infrastructure\Persistence\CacheWalletDataSource;
 
 use App\Application\WalletDataSource\WalletRepository;
+use App\Domain\Coin;
 use App\Domain\Wallet;
 use App\Infrastructure\Persistence\CacheWalletDataSource\CacheWalletRepository;
 use Mockery;
@@ -22,12 +23,13 @@ class CacheWalletRepositoryTest extends TestCase
      */
     public function createWalletTest()
     {
-        $expect = new Wallet(1, 1, 1, 1, 1, 1, 1, 1);;
+        $expect = new Wallet(1, 1, []);
+        ;
 
-        $user = $this->walletRepository->create('1');
+        $wallet = $this->walletRepository->create('1');
 
-        $this->assertInstanceOf(Wallet::class, $user);
-        $this->assertEquals($expect, $user);
+        $this->assertInstanceOf(Wallet::class, $wallet);
+        $this->assertEquals($expect, $wallet);
     }
 
     /**
@@ -35,11 +37,13 @@ class CacheWalletRepositoryTest extends TestCase
      */
     public function getsWalletTest()
     {
-        $expect = new Wallet(1, 1, 1, 1, 1, 1, 1, 1);;
+        $expect = new Wallet('1', '1', [
+            '90' => new Coin(90, 'BTC', 'Bitcoin', 0, 30000)
+        ]);
 
-        $user = $this->walletRepository->findWalletById('1');
+        $wallet = $this->walletRepository->findWalletById('1');
 
-        $this->assertInstanceOf(Wallet::class, $user);
-        $this->assertEquals($expect, $user);
+        $this->assertInstanceOf(Wallet::class, $wallet);
+        $this->assertEquals($expect, $wallet);
     }
 }

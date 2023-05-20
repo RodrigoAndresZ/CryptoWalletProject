@@ -99,12 +99,7 @@ class CreateWalletControllerTest extends TestCase
             ->andReturn(new Wallet(
                 1,
                 1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1
+                []
             ));
 
         $response = $this->postJson('/api/wallet/open', $json);

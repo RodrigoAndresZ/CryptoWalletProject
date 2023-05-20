@@ -52,7 +52,7 @@ class CreateWalletServiceTest extends TestCase
             ->andReturn(new User(1, "email@email.com"));
 
         $wallet_id = "1";
-        $wallet = new Wallet(1, 1, 1, 1, 1, 1, 1, 1);
+        $wallet = new Wallet(1, 1, []);
         $this->walletRepository
             ->expects('create')
             ->with($user_id)
