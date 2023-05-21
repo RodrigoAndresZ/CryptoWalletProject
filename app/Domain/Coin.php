@@ -19,7 +19,6 @@ class Coin
         $this->coin_id = $coin_id;
         $this->symbol = $symbol;
         $this->name = $name;
-
         $this->value_usd = $value_usd;
     }
 

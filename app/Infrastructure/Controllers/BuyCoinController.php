@@ -9,30 +9,31 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Domain\Coin;
+use App\Infrastructure\Controllers\BuyCoinFormRequest;
+use App\Infrastructure\Service\BuyCoinService;
 
 class BuyCoinController extends BaseController
 {
-    private CoinDataSource $coinDataSource;
+    private BuyCoinService $buyCoinService;
 
     /**
-     * @param CoinDataSource $coinDataSource
+     * @param BuyCoinService $buyCoinService
      */
-    public function __construct(CoinDataSource $coinDataSource)
+    public function __construct(BuyCoinService $buyCoinService)
     {
-        $this->coinDataSource = $coinDataSource;
+        $this->buyCoinService = $buyCoinService;
     }
 
 
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(BuyCoinFormRequest $request): JsonResponse
     {
+        $jsonData = $request->json()->all();
 
+        $coinId = $jsonData['coin_id'];
+        $walletId = $jsonData['wallet_id'];
+        $amountUsd = $jsonData['amount_usd'];
 
-
-        $coinId = $request->input('id');
-        $walletId = $request->input('id2');
-        $amountUsd = $request->input('amount_usd');
-
-        $coin = $this->coinDataSource->getCoinByName($coinId);
+        $coin = $this->buyCoinService->execute($coinId);
 
 
         if ($coin === null) {
@@ -44,6 +45,29 @@ class BuyCoinController extends BaseController
             'symbol' => $coin->getSymbol(),
         ], Response::HTTP_OK);
 
-        // Resto de la lógica para comprar la moneda
+        /*// Calcula la cantidad de moneda que se puede comprar
+        $coinPrice = $coin->getValueUsd();
+        $coinAmount = $amountUsd / $coinPrice;
+
+        // Obtiene la wallet desde la caché
+        $wallet = Cache::get('wallet:' . $wallet_id);
+
+        if ($wallet === null) {
+            return response()->json(['error' => 'La wallet no existe'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Agrega la moneda comprada al array de monedas en la wallet
+        $coins = $wallet['coins'];
+        $coins[$coinId] = $coinAmount;
+        $wallet['coins'] = $coins;
+
+        Cache::put('wallet:' . $wallet_id, $wallet);
+
+        return response()->json([
+            'coin_id' => $coin->getCoinId(),
+            'name' => $coin->getName(),
+            'symbol' => $coin->getSymbol(),
+            'coin_amount' => $coinAmount,
+        ], Response::HTTP_OK);*/
     }
 }

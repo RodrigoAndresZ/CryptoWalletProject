@@ -4,8 +4,8 @@ namespace App\Domain;
 
 class User
 {
-    private int $user_id
-    
+    private int $user_id;
+
     private string $email;
 
     public function __construct(int $user_id, string $email)
