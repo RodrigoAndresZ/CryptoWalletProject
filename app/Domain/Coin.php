@@ -14,12 +14,13 @@ class Coin
 
     private float $value_usd;
 
-    public function __construct(string $coin_id, string $symbol, string $name, float $value_usd)
+    public function __construct(string $coin_id, string $symbol, string $name, float $value_usd, float $amount)
     {
         $this->coin_id = $coin_id;
         $this->symbol = $symbol;
         $this->name = $name;
         $this->value_usd = $value_usd;
+        $this->amount = $amount;
     }
 
     public function getCoinId(): string
@@ -36,12 +37,26 @@ class Coin
         return $this->name;
     }
 
-    public function getAmount(): float
-    {
-        return $this->amount;
-    }
     public function getValueUsd(): float
     {
         return $this->value_usd;
     }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param float $amount
+     */
+    public function setAmount(float $amount): void
+    {
+        $this->amount = $amount;
+    }
+
+
+
+
+
 }

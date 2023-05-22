@@ -33,17 +33,21 @@ class BuyCoinController extends BaseController
         $walletId = $jsonData['wallet_id'];
         $amountUsd = $jsonData['amount_usd'];
 
-        $coin = $this->buyCoinService->execute($coinId);
+        $coin = $this->buyCoinService->execute($coinId,$amountUsd);
 
 
         if ($coin === null) {
-            return response()->json(['error' => 'La coin no existe'], Response::HTTP_NOT_FOUND);
+            return response()->json([
+                'error' => 'El coin id dado no existe'
+            ], Response::HTTP_NOT_FOUND);
         }
         return response()->json([
             'coin_id' => $coin->getCoinId(),
             'name' => $coin->getName(),
             'symbol' => $coin->getSymbol(),
         ], Response::HTTP_OK);
+
+
 
         /*// Calcula la cantidad de moneda que se puede comprar
         $coinPrice = $coin->getValueUsd();
@@ -56,9 +60,9 @@ class BuyCoinController extends BaseController
             return response()->json(['error' => 'La wallet no existe'], Response::HTTP_NOT_FOUND);
         }
 
-        // Agrega la moneda comprada al array de monedas en la wallet
         $coins = $wallet['coins'];
-        $coins[$coinId] = $coinAmount;
+        $coins[$coinId] = $coin->toArray(); // Agrega todos los datos de la moneda al array
+        $coins[$coinId]['amount'] = $coinAmount; // Agrega la cantidad de moneda comprada
         $wallet['coins'] = $coins;
 
         Cache::put('wallet:' . $wallet_id, $wallet);

@@ -8,7 +8,7 @@ use App\Domain\Coin;
 class CoinLoreDataSource implements CoinDataSource
 {
     private const BASE_URL = 'https://api.coinlore.net/api';
-    public function getCoinByName(string $coin_id): ?Coin
+    public function getCoinByName(string $coin_id, float $amount_usd): ?Coin
     {
         $url = self::BASE_URL . "/tickers/";
         $response = $this->makeRequest($url);
@@ -20,13 +20,31 @@ class CoinLoreDataSource implements CoinDataSource
                         $coinData['id'],
                         $coinData['symbol'],
                         $coinData['name'],
-                        $coinData['price_usd']
+                        $coinData['price_usd'],
+                        $amount_usd /  $coinData['price_usd']
+
                     );
                 }
             }
         }
 
         return null;
+    }
+
+
+    public function getActualValue(string $coin_id): ?float{
+        $url = self::BASE_URL . "/tickers/";
+        $response = $this->makeRequest($url);
+        $response = $response['data'];
+        if (!empty($response)) {
+            foreach ($response as $coinData) {
+                if ($coinData['name'] === $coin_id) {
+                    return $coinData['price_usd'];
+                }
+            }
+        }
+        return null;
+
     }
 
 

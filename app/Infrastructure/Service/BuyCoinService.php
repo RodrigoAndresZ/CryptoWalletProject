@@ -22,8 +22,8 @@ class BuyCoinService
         $this->coinDataSource = $coinDataSource;
     }
 
-    public function execute(string $coinId): ?Coin
+    public function execute(string $coinId, float $amount): ?Coin
     {
-        return $this->coinDataSource->getCoinByName($coinId);
+        return $this->coinDataSource->getCoinByName($coinId, $amount);
     }
 }

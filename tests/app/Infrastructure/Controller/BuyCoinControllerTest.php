@@ -12,6 +12,7 @@ class BuyCoinControllerTest extends TestCase
 {
     private CoinDataSource $coinDataSource;
 
+
     /**
      * @setUp
      */
@@ -41,7 +42,7 @@ class BuyCoinControllerTest extends TestCase
 
         $this->coinDataSource
             ->shouldReceive('getCoinByName')
-            ->with($coin_id);
+            ->with($coin_id,$amount_usd);
 
         $response = $this->postJson('/api/coin/buy', $json);
 
@@ -67,12 +68,13 @@ class BuyCoinControllerTest extends TestCase
 
         $this->coinDataSource
             ->shouldReceive('getCoinByName')
-            ->with($coin_id);
+            ->with($coin_id,$amount_usd)
+            ->andReturn(null);
 
         $response = $this->postJson('/api/coin/buy', $json);
 
         $response->assertNotFound();
-        $response->assertExactJson(['error' => 'La coin no existe']);
+        $response->assertExactJson(['error' => 'El coin id dado no existe']);
     }
 
 
