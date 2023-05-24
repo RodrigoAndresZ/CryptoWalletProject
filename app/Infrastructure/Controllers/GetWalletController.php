@@ -3,12 +3,14 @@
 namespace App\Infrastructure\Controllers;
 
 use App\Application\WalletDataSource\WalletRepository;
+
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class GetWalletController extends BaseController
 {
+
     private WalletRepository $walletRepository;
 
     public function __construct(WalletRepository $walletRepository)

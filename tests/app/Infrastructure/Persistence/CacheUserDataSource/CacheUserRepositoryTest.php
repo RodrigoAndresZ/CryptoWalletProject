@@ -23,6 +23,7 @@ class CacheUserRepositoryTest extends TestCase
     {
         $expect = new User(1, "email@email.com");
 
+
         $user = $this->userDataSource->findUserById('2');
 
         $this->assertInstanceOf(User::class, $user);

@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence\CacheUserDataSource;
 
 use App\Application\UserDataSource\UserRepository;
 use App\Domain\User;
+use Illuminate\Support\Facades\Cache;
 
 class CacheUserRepository implements UserRepository
 {
