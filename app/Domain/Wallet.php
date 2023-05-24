@@ -12,7 +12,6 @@ class Wallet
     public function __construct(
         string $user_id,
         string $wallet_id,
-
         array $coins
     ) {
         $this->user_id = $user_id;
@@ -32,7 +31,44 @@ class Wallet
 
     public function getCoins(): array
     {
-        return $this->coins;
+        $CoinsJson = [];
+        foreach ($this->coins as $coin) {
+            array_push($CoinsJson, $coin->getJson());
+        }
+
+        return $CoinsJson;
     }
 
+    public function getBalance(): float
+    {
+        $balance = 0;
+        foreach ($this->getCoins() as $coinJson) {
+            $balance += $coinJson['amount'] * $coinJson['value_usd'];
+        }
+        return $balance;
+    }
+    public function addCoin(Coin $coin): void
+    {
+        array_push($this->coins, $coin);
+    }
+    public function deleteCoin(Coin $coin): void
+    {
+        for($i = 0; $i < sizeof($this->coins); $i++) {
+            if($this->coins[$i]->getCoinId() == $coin->getCoinId()){
+                unset($this->coins[$i]);
+                return;
+            }
+        }
+        return;
+    }
+    public function updateCoin(Coin $coin): void
+    {
+        for($i = 0; $i < sizeof($this->coins); $i++) {
+            if($this->coins[$i]->getCoinId() == $coin->getCoinId()){
+                $this->coins[$i] = $coin;
+                return;
+            }
+        }
+        return;
+    }
 }

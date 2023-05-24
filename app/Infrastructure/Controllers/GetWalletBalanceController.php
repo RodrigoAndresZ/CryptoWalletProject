@@ -3,14 +3,12 @@
 namespace App\Infrastructure\Controllers;
 
 use App\Application\WalletDataSource\WalletRepository;
-
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-class GetWalletController extends BaseController
+class GetWalletBalanceController extends BaseController
 {
-
     private WalletRepository $walletRepository;
 
     public function __construct(WalletRepository $walletRepository)
@@ -30,6 +28,8 @@ class GetWalletController extends BaseController
 
 
         //si se encuentra la wallet devolvemos todos sus datos
-        return response()->json($wallet->getCoins(), Response::HTTP_OK);
+        return response()->json([
+            "balance_usd" => $wallet->getBalance()
+        ], Response::HTTP_OK);
     }
 }

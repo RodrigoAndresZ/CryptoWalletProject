@@ -39,10 +39,29 @@ class CacheWalletRepositoryTest extends TestCase
     /**
      * @test
      */
+    public function getsWalletNoWalletIdTest()
+    {
+        $coin_id = '90';
+        $coins = new Coin($coin_id, 'BTC', 'Bitcoin', 0, 30000);
+        $expect = new Wallet('1', '1', [
+            $coins
+        ]);
+
+        $wallet = $this->walletRepository->findWalletById('2');
+
+        $this->assertInstanceOf(Wallet::class, $wallet);
+        $this->assertEquals($expect, $wallet);
+    }
+
+    /**
+     * @test
+     */
     public function getsWalletTest()
     {
+        $coin_id = '90';
+        $coins = new Coin($coin_id, 'BTC', 'Bitcoin', 0, 30000);
         $expect = new Wallet('1', '1', [
-            '90' => new Coin(90, 'BTC', 'Bitcoin', 0, 30000)
+            $coins
         ]);
 
         $wallet = $this->walletRepository->findWalletById('1');

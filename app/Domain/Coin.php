@@ -45,4 +45,15 @@ class Coin
     {
         return $this->value_usd;
     }
+
+    public function getJson(): array
+    {
+        return [
+            "coin_id" => $this->coin_id,
+            "name" => $this->name,
+            "symbol" => $this->symbol,
+            "amount" => $this->amount,
+            "value_usd" => $this->value_usd
+        ];
+    }
 }
