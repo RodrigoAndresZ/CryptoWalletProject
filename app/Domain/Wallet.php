@@ -8,6 +8,7 @@ class Wallet
     private string $wallet_id;
     private array $coins;
 
+
     public function __construct(
         string $user_id,
         string $wallet_id,
