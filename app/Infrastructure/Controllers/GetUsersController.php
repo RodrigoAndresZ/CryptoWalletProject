@@ -2,6 +2,8 @@
 
 namespace App\Infrastructure\Controllers;
 
+use App\Application\UserDataSource\UserDataSource;
+
 use App\Application\UserDataSource\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;

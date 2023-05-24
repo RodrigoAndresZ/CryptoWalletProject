@@ -1,10 +1,10 @@
 <?php
 
-namespace app\Infrastructure\Persistence\CacheUserDataSource;
+namespace Tests\app\Infrastructure\Persistence\CacheUserDataSource;
 
 use App\Application\UserDataSource\UserRepository;
 use App\Domain\User;
-use Mockery;
+use App\Infrastructure\Persistence\CacheUserDataSource\CacheUserRepository;
 use Tests\TestCase;
 
 class CacheUserRepositoryTest extends TestCase
@@ -13,46 +13,60 @@ class CacheUserRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-        $this->userDataSource = $this->mock(UserRepository::class);
-        $this->app->bind(UserRepository::class, function () {
-            return $this->userDataSource;
-        });
-    }
-
-
-
-    /**
-     * @test
-     */
-    public function userWithGivenEmailDoesNotExist()
-    {
-
-        $this->userDataSource
-            ->expects('findByEmail')
-            ->with('email@email.com')
-            ->andReturnNull();
-
-        $response = $this->get('/api/users/email@email.com');
-
-        //$response->assertNotFound();
-        $response->assertExactJson(['error' => 'usuario no encontrado']);
+        $this->userDataSource = new CacheUserRepository();
     }
 
     /**
      * @test
      */
-    public function getsUser()
+    public function userWithGivenUserIdDoesNotExistTest()
     {
+        $expect = new User(1, "email@email.com");
 
-        $this->userDataSource
-            ->expects('findByEmail')
-            ->with('email@email.com')
-            ->andReturn(new User(1, 'email@email.com'));
 
-        $response = $this->get('/api/users/email@email.com');
+        $user = $this->userDataSource->findUserById('2');
 
-        $response->assertOk();
-        $response->assertExactJson(['id' => 1, 'email' => 'email@email.com']);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expect, $user);
+    }
+
+    /**
+     * @test
+     */
+    public function userWithGivenEmailDoesNotExistTest()
+    {
+        $expect = new User(2, "email@email.com");
+
+        $user = $this->userDataSource->findByEmail('em@email.com');
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expect, $user);
+    }
+
+
+    /**
+     * @test
+     */
+    public function getsUserByIdTest()
+    {
+        $expect = new User(1, "email@email.com");
+
+        $user = $this->userDataSource->findUserById('1');
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expect, $user);
+    }
+
+    /**
+     * @test
+     */
+    public function getsUserByEmailTest()
+    {
+        $expect = new User(2, "email@email.com");
+
+        $user = $this->userDataSource->findByEmail('email@email.com');
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($expect, $user);
     }
 }

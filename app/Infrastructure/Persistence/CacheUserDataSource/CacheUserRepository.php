@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 class CacheUserRepository implements UserRepository
 {
-    public function findUserbyId(string $user_id): ?User
+    public function findUserById(string $user_id): ?User
     {
         //return Cache::get($user_id);
         return new User(1, "email@email.com");

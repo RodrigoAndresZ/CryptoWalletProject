@@ -14,6 +14,10 @@ class User
         $this->email = $email;
     }
 
+    /**
+     * @return int
+     */
+
     public function getUserId(): int
     {
         return $this->user_id;
@@ -22,7 +26,9 @@ class User
     /**
      * @return string
      */
-    public function getEmail(): string
+
+    public function getEmail(): int
+
     {
         return $this->email;
     }

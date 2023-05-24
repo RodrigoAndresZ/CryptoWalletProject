@@ -10,6 +10,7 @@ interface UserRepository
 
     public function findUserbyId(string $user_id): ?User;
 
+
     /**
      * @return User[]
      */
