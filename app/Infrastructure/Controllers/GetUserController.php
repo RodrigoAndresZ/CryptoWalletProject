@@ -26,7 +26,8 @@ class GetUserController extends BaseController
         }
 
         return response()->json([
-            'id' => $user->getUserId(),
+            'id' => $user->getIdUser(),
+
             'email' => $user->getEmail()
         ], Response::HTTP_OK);
     }

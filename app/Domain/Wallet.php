@@ -53,8 +53,8 @@ class Wallet
     }
     public function deleteCoin(Coin $coin): void
     {
-        for($i = 0; $i < sizeof($this->coins); $i++) {
-            if($this->coins[$i]->getCoinId() == $coin->getCoinId()){
+        for ($i = 0; $i < sizeof($this->coins); $i++) {
+            if ($this->coins[$i]->getCoinId() == $coin->getCoinId()) {
                 unset($this->coins[$i]);
                 return;
             }
@@ -63,8 +63,8 @@ class Wallet
     }
     public function updateCoin(Coin $coin): void
     {
-        for($i = 0; $i < sizeof($this->coins); $i++) {
-            if($this->coins[$i]->getCoinId() == $coin->getCoinId()){
+        for ($i = 0; $i < sizeof($this->coins); $i++) {
+            if ($this->coins[$i]->getCoinId() == $coin->getCoinId()) {
                 $this->coins[$i] = $coin;
                 return;
             }

@@ -61,8 +61,8 @@ class GetWalletControllerTest extends TestCase
                 "coin_id" => '90',
                 "name" => 'Bitcoin',
                 "symbol" => 'BTC',
-                "amount" => 0,
-                "value_usd" => 30000
+                "amount" => 30000,
+                "value_usd" => 0
             ]
         ]);
     }

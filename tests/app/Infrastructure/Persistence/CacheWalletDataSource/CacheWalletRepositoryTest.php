@@ -3,12 +3,10 @@
 namespace app\Infrastructure\Persistence\CacheWalletDataSource;
 
 use App\Application\WalletDataSource\WalletRepository;
-
 use App\Domain\Coin;
 use App\Domain\Wallet;
 use App\Infrastructure\Persistence\CacheWalletDataSource\CacheWalletRepository;
 use Mockery;
-
 use Tests\TestCase;
 
 class CacheWalletRepositoryTest extends TestCase
@@ -18,7 +16,6 @@ class CacheWalletRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $this->walletRepository = new CacheWalletRepository();
-
     }
 
     /**
@@ -68,6 +65,5 @@ class CacheWalletRepositoryTest extends TestCase
 
         $this->assertInstanceOf(Wallet::class, $wallet);
         $this->assertEquals($expect, $wallet);
-
     }
 }

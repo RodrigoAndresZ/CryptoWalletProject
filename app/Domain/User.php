@@ -5,6 +5,7 @@ namespace App\Domain;
 class User
 {
     private int $user_id;
+
     private string $email;
 
 
@@ -14,21 +15,13 @@ class User
         $this->email = $email;
     }
 
-    /**
-     * @return int
-     */
 
-    public function getUserId(): int
+    public function getIdUser(): int
     {
         return $this->user_id;
     }
 
-    /**
-     * @return string
-     */
-
-    public function getEmail(): int
-
+    public function getEmail(): string
     {
         return $this->email;
     }
