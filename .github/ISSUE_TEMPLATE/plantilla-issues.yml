@@ -1,0 +1,21 @@
+name: Nueva Issue
+description: Crea una nueva issue
+title: "[###]- "
+labels: []
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por rellenar el formulario!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Descripcion
+      description: Explica brevemente la issue
+      placeholder: Escribe aqui la descripcion
+      value:
+    validations:
+      required: true
+  

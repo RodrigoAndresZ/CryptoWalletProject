@@ -6,32 +6,17 @@ class Wallet
 {
     private string $user_id;
     private string $wallet_id;
-    private string $coin_id;
+    private array $coins;
 
-    private string $name;
-    private string $symbol;
-    private double $amount;
-    private double $value_usd;
-    private double $balance_usd;
 
     public function __construct(
         string $user_id,
         string $wallet_id,
-        string $coin_id,
-        string $name,
-        string $symbol,
-        float $amount,
-        float $value_usd,
-        float $balance_usd
+        array $coins
     ) {
         $this->user_id = $user_id;
         $this->wallet_id = $wallet_id;
-        $this->coin_id = $coin_id;
-        $this->name = $name;
-        $this->symbol = $symbol;
-        $this->amount = $amount;
-        $this->value_usd = $value_usd;
-        $this->balance_usd = $balance_usd;
+        $this->coins = $coins;
     }
 
 
@@ -44,30 +29,46 @@ class Wallet
         return $this->wallet_id;
     }
 
-    public function getCoinId(): string
+    public function getCoins(): array
     {
-        return $this->coin_id;
+        $CoinsJson = [];
+        foreach ($this->coins as $coin) {
+            array_push($CoinsJson, $coin->getJson());
+        }
+
+        return $CoinsJson;
     }
 
-    public function getName(): string
+    public function getBalance(): float
     {
-        return $this->name;
+        $balance = 0;
+        foreach ($this->getCoins() as $coinJson) {
+            $balance += $coinJson['amount'] * $coinJson['value_usd'];
+        }
+        return $balance;
     }
-
-    public function getSymbol(): string
+    public function addCoin(Coin $coin): void
     {
-        return $this->symbol;
+        array_push($this->coins, $coin);
     }
-    public function getAmount(): float
+    public function deleteCoin(Coin $coin): void
     {
-        return $this->amount;
+        for ($i = 0; $i < sizeof($this->coins); $i++) {
+            if ($this->coins[$i]->getCoinId() == $coin->getCoinId()) {
+                unset($this->coins[$i]);
+                return;
+            }
+        }
+        return;
     }
-    public function getValueUsd(): float
+    public function updateCoin(Coin $coin): void
     {
-        return $this->value_usd;
-    }
-    public function getBalanceUsd(): float
-    {
-        return $this->balance_usd;
+        for ($i = 0; $i < sizeof($this->coins); $i++) {
+            if ($this->coins[$i]->getCoinId() == $coin->getCoinId()) {
+                $this->coins[$i] = $coin;
+                return;
+            }
+        }
+        return;
     }
 }

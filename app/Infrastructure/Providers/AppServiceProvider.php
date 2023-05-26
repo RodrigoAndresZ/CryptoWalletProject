@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//        $this->app->bind(UserDataSource::class, function () {
+//        $this->app->bind(UserRepository::class, function () {
 //            return new EloquentUserDataSource();
 //        });
     }

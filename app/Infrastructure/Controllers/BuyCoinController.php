@@ -3,7 +3,6 @@
 namespace App\Infrastructure\Controllers;
 
 use App\Application\DataSource\CoinDataSource;
-use Barryvdh\Debugbar\Controllers\BaseController;
 use App\Infrastructure\Persistence\CoinLoreDataSource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -11,6 +10,10 @@ use Illuminate\Http\Request;
 use App\Domain\Coin;
 use App\Infrastructure\Controllers\BuyCoinFormRequest;
 use App\Infrastructure\Service\BuyCoinService;
+use App\Application\UserDataSource\UserRepository;
+use App\Application\WalletDataSource\WalletRepository;
+use App\Infrastructure\Persistence\ApiCoinDataSource\ApiCoinRepository;
+use Illuminate\Routing\Controller as BaseController;
 
 class BuyCoinController extends BaseController
 {
@@ -19,6 +22,14 @@ class BuyCoinController extends BaseController
     /**
      * @param BuyCoinService $buyCoinService
      */
+
+
+    private UserRepository $userDataSource;
+
+    private WalletRepository $walletRepository;
+
+    private ApiCoinRepository $apiCoinRepository;
+
     public function __construct(BuyCoinService $buyCoinService)
     {
         $this->buyCoinService = $buyCoinService;
@@ -33,7 +44,7 @@ class BuyCoinController extends BaseController
         $walletId = $jsonData['wallet_id'];
         $amountUsd = $jsonData['amount_usd'];
 
-        $coin = $this->buyCoinService->execute($coinId,$amountUsd);
+        $coin = $this->buyCoinService->execute($coinId, $amountUsd);
 
 
         if ($coin === null) {

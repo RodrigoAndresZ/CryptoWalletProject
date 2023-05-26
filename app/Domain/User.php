@@ -8,11 +8,13 @@ class User
 
     private string $email;
 
+
     public function __construct(int $user_id, string $email)
     {
         $this->user_id = $user_id;
         $this->email = $email;
     }
+
 
     public function getIdUser(): int
     {
