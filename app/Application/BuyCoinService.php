@@ -1,13 +1,8 @@
 <?php
 
-namespace App\Infrastructure\Service;
+namespace App\Application;
 
 use App\Application\DataSource\CoinDataSource;
-use Barryvdh\Debugbar\Controllers\BaseController;
-use App\Infrastructure\Persistence\CoinLoreDataSource;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 use App\Domain\Coin;
 
 class BuyCoinService

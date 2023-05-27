@@ -2,22 +2,18 @@
 
 namespace App\Infrastructure\Persistence\CacheUserDataSource;
 
-use App\Application\UserDataSource\UserRepository;
+use App\Application\DataSource\UserDataSource;
 use App\Domain\User;
 use Illuminate\Support\Facades\Cache;
 
-class CacheUserRepository implements UserRepository
+class CacheUserRepository implements UserDataSource
 {
     public function findUserById(string $user_id): ?User
     {
-        //return Cache::get($user_id);
-        return new User(1, "email@email.com");
+        return new User('1');
     }
 
-    public function findByEmail(string $email): User
-    {
-        return new User(2, "email@email.com");
-    }
+
 
     public function getAll(): array
     {

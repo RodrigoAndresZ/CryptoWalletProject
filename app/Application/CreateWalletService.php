@@ -2,37 +2,42 @@
 
 namespace App\Application;
 
+use App\Application\DataSource\WalletDataSource;
 use App\Application\Exceptions\UserNotFoundException;
-use App\Application\UserDataSource\UserRepository;
-use App\Application\WalletDataSource\WalletRepository;
-use App\Domain\User;
+use App\Application\DataSource\CoinDataSource;
+use App\Application\DataSource\UserDataSource;
 use App\Domain\Wallet;
-use App\Infrastructure\Persistence\CacheUserDataSource\CacheUserRepository;
-use App\Infrastructure\Persistence\CacheWalletDataSource\CacheWalletRepository;
+use App\Domain\Coin;
 
 class CreateWalletService
 {
-    private UserRepository $UserRepository;
-    private WalletRepository $WalletRepository;
+    private WalletDataSource $WalletDataSource;
 
-    public function __construct(UserRepository $UserRepository, WalletRepository $WalletRepository)
+    public function __construct(WalletDataSource $WalletDataSource)
     {
-        $this->UserRepository = $UserRepository;
-        $this->WalletRepository = $WalletRepository;
+
+        $this->WalletDataSource = $WalletDataSource;
     }
 
 
-    /**
-     * @throws UserNotFoundException
-     */
-    public function execute(string $user_id): string
+    public function executeCreateWallet(): ?string
     {
-        $user = $this->UserRepository->findUserById($user_id);
-        if (is_null($user)) {
-            throw new UserNotFoundException();
-        }
+        $wallet = $this->WalletDataSource->createWallet();
+        return $wallet;
+    }
 
-        $wallet = $this->WalletRepository->create($user_id);
-        return $wallet->getWalletId() ;
+    public function executefindWalletById(string $wallet_id): ?Wallet
+    {
+        $wallet = $this->WalletDataSource->findWalletById($wallet_id);
+        return $wallet;
+    }
+    public function executeAddCoinInWallet(string $wallet_id, Coin $coin): void
+    {
+        $this->WalletDataSource->addCoinToWallet($wallet_id, $coin);
+    }
+
+    public function executeSellCoinWallet(string $wallet_id,Coin $coin, float $newUsdValue,string $amountUsd):void
+    {
+        $this->WalletDataSource->sellCoinWallet($wallet_id, $coin, $newUsdValue, $amountUsd);
     }
 }

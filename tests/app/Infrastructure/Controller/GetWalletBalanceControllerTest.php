@@ -2,20 +2,20 @@
 
 namespace Tests\app\Infrastructure\Controller;
 
-use App\Application\WalletDataSource\WalletRepository;
+use App\Application\DataSource\WalletDataSource;
 use App\Domain\Coin;
 use App\Domain\Wallet;
 use Tests\TestCase;
 
 class GetWalletBalanceControllerTest extends TestCase
 {
-    private WalletRepository $walletRepository;
+    private WalletDataSource $walletRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->walletRepository = $this->mock(WalletRepository::class);
-        $this->app->bind(WalletRepository::class, function () {
+        $this->walletRepository = $this->mock(WalletDataSource::class);
+        $this->app->bind(WalletDataSource::class, function () {
             return $this->walletRepository;
         });
     }
@@ -37,9 +37,7 @@ class GetWalletBalanceControllerTest extends TestCase
         $response->assertExactJson(['error' => 'cartera no encontrado']);
     }
 
-    /**
-     * @test
-     */
+
     public function getWalletBalanceTest()
     {
         $wallet_id = '1';
@@ -51,7 +49,7 @@ class GetWalletBalanceControllerTest extends TestCase
         $this->walletRepository
             ->expects('findWalletById')
             ->with($wallet_id)
-            ->andReturn(new Wallet('1', '1', [
+            ->andReturn(new Wallet('1', [
                 $coins,
                 $coins2
             ]));

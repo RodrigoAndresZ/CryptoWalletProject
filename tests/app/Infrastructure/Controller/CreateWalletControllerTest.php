@@ -2,29 +2,33 @@
 
 namespace app\Infrastructure\Controller;
 
-use App\Application\Exceptions\UserNotFoundException;
+use App\Application\DataSource\UserDataSource;
+use App\Application\DataSource\WalletDataSource;
 use App\Application\UserDataSource\UserRepository;
-use App\Application\WalletDataSource\WalletRepository;
+use App\Infrastructure\Persistence\CacheUserDataSource\CacheUserRepository;
+use App\Infrastructure\Persistence\CacheWalletDataSource\CacheWalletDataSource;
 use App\Domain\User;
 use App\Domain\Wallet;
+use App\Infrastructure\Persistence\FileUserDataSource;
 use Tests\TestCase;
+use Mockery;
 
 class CreateWalletControllerTest extends TestCase
 {
-    private UserRepository $userRepository;
-    private WalletRepository $walletRepository;
+    private UserDataSource $userRepository;
+    private WalletDataSource $walletDataSource;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->userRepository = $this->mock(UserRepository::class);
-        $this->app->bind(UserRepository::class, function () {
+        $this->userRepository = $this->mock(UserDataSource::class);
+        $this->app->bind(UserDataSource::class, function () {
             return $this->userRepository;
         });
 
-        $this->walletRepository = $this->mock(WalletRepository::class);
-        $this->app->bind(WalletRepository::class, function () {
-            return $this->walletRepository;
+        $this->walletDataSource = $this->mock(WalletDataSource::class);
+        $this->app->bind(WalletDataSource::class, CacheWalletDataSource::class, function () {
+            return $this->walletDataSource;
         });
     }
 
@@ -67,7 +71,7 @@ class CreateWalletControllerTest extends TestCase
      */
     public function createWalletFromRequestNoUserTest()
     {
-        $user_id = "99";
+        $user_id = '99';
         $json = ["user_id" => $user_id];
 
         $this->userRepository
@@ -76,6 +80,7 @@ class CreateWalletControllerTest extends TestCase
             ->andReturn(null);
 
         $response = $this->postJson('/api/wallet/open', $json);
+
         $response->assertNotFound();
         $response->assertExactJson(['error' => 'usuario no encontrado']);
     }
@@ -91,20 +96,13 @@ class CreateWalletControllerTest extends TestCase
         $this->userRepository
             ->expects('findUserById')
             ->with($user_id)
-            ->andReturn(new User(1, "email@email.com"));
+            ->andReturn(new User(1));
 
-        $this->walletRepository
-            ->expects('create')
-            ->with('1')
-            ->andReturn(new Wallet(
-                1,
-                1,
-                []
-            ));
+
 
         $response = $this->postJson('/api/wallet/open', $json);
 
         $response->assertOk();
-        $response->assertExactJson(['wallet_id' => '1']);
+        $response->assertExactJson(['exito' => 'wallet creada correctamente','wallet_id' => 'wallet_0']);
     }
 }

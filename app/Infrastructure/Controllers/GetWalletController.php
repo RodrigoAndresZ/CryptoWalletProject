@@ -2,16 +2,16 @@
 
 namespace App\Infrastructure\Controllers;
 
-use App\Application\WalletDataSource\WalletRepository;
+use App\Application\DataSource\WalletDataSource;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class GetWalletController extends BaseController
 {
-    private WalletRepository $walletRepository;
+    private WalletDataSource $walletRepository;
 
-    public function __construct(WalletRepository $walletRepository)
+    public function __construct(WalletDataSource $walletRepository)
     {
         $this->walletRepository = $walletRepository;
     }

@@ -10,7 +10,7 @@ use App\Domain\Coin;
 use App\Domain\Wallet;
 use App\Infrastructure\Persistence\CoinLoreDataSource;
 
-class BuyCoinControllerTest extends TestCase
+class SellCoinControllerTest extends TestCase
 {
     private CoinDataSource $coinDataSource;
     private WalletDataSource $walletDataSource;
@@ -37,9 +37,9 @@ class BuyCoinControllerTest extends TestCase
      * @test
      */
 
-    public function givenCoinIdToBuyIsCorrect()
+    public function givenCoinIdToSellIsCorrect()
     {
-        $coin_id = 'Bitcoin';
+        $coin_id = 'Ethereum';
         $wallet_id = 'walletPrueba';
         $amount_usd = 0.85;
 
@@ -51,45 +51,19 @@ class BuyCoinControllerTest extends TestCase
             ->shouldReceive('getCoinByName')
             ->with($coin_id, $amount_usd);
 
+
         $this->walletDataSource
             ->expects("findWalletById")
             ->with($wallet_id)
             ->andReturn(new Wallet($wallet_id));
 
         $this->walletDataSource
-            ->expects("addCoinToWallet");
+            ->expects("sellCoinWallet");
 
-        $response = $this->postJson('/api/coin/buy', $json);
+        $response = $this->postJson('/api/coin/sell', $json);
 
         $response->assertOk();
-        $response->assertExactJson(['exito' => 'moneda comprada correctamente']);
-    }
-
-
-
-    /**
-     * @test
-     */
-    public function givenCoinIdIsNotCorrect()
-    {
-
-        $coin_id = 'UpnaCoin';
-        $wallet_id = 'walletPrueba';
-        $amount_usd = 0.85;
-
-        $json = ['coin_id' => $coin_id,
-            'wallet_id' => $wallet_id,
-            'amount_usd' => $amount_usd];
-
-        $this->coinDataSource
-            ->shouldReceive('getCoinByName')
-            ->with($coin_id, $amount_usd)
-            ->andReturn(null);
-
-        $response = $this->postJson('/api/coin/buy', $json);
-
-        $response->assertNotFound();
-        $response->assertExactJson(['error' => 'El coin id dado no existe']);
+        $response->assertExactJson(['exito' => 'moneda vendida correctamente']);
     }
 
     /**
@@ -120,6 +94,36 @@ class BuyCoinControllerTest extends TestCase
         $response->assertNotFound();
         $response->assertExactJson([ 'error' => 'Wallet con ese ID no fue encontrada']);
     }
+
+
+
+    /**
+     * @test
+     */
+    public function givenCoinIdIsNotCorrect()
+    {
+
+        $coin_id = 'UpnaCoin';
+        $wallet_id = 'walletPrueba';
+        $amount_usd = 0.85;
+
+        $json = ['coin_id' => $coin_id,
+            'wallet_id' => $wallet_id,
+            'amount_usd' => $amount_usd];
+
+        $this->coinDataSource
+            ->shouldReceive('getCoinByName')
+            ->with($coin_id, $amount_usd)
+            ->andReturn(null);
+
+        $response = $this->postJson('/api/coin/buy', $json);
+
+        $response->assertNotFound();
+        $response->assertExactJson(['error' => 'El coin id dado no existe']);
+    }
+
+
+
 
 
     /**

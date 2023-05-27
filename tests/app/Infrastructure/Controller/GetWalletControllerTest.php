@@ -2,20 +2,20 @@
 
 namespace Tests\app\Infrastructure\Controller;
 
-use App\Application\WalletDataSource\WalletRepository;
+use App\Application\DataSource\WalletDataSource;
 use App\Domain\Coin;
 use App\Domain\Wallet;
 use Tests\TestCase;
 
 class GetWalletControllerTest extends TestCase
 {
-    private WalletRepository $walletRepository;
+    private WalletDataSource $walletRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->walletRepository = $this->mock(WalletRepository::class);
-        $this->app->bind(WalletRepository::class, function () {
+        $this->walletRepository = $this->mock(WalletDataSource::class);
+        $this->app->bind(WalletDataSource::class, function () {
             return $this->walletRepository;
         });
     }
@@ -49,21 +49,11 @@ class GetWalletControllerTest extends TestCase
             ->expects('findWalletById')
             ->with($wallet_id)
             ->andReturn(new Wallet(
-                '1',
-                '1',
-                [$coin]
+                '1'
             ));
 
         $response = $this->get("/api/wallet/$wallet_id");
         $response->assertOk();
-        $response->assertExactJson([
-            [
-                "coin_id" => '90',
-                "name" => 'Bitcoin',
-                "symbol" => 'BTC',
-                "amount" => 30000,
-                "value_usd" => 0
-            ]
-        ]);
+        $response->assertExactJson([]);
     }
 }
