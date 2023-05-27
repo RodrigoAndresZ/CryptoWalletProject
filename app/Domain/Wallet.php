@@ -15,7 +15,6 @@ class Wallet
         $this->coins = [];
     }
 
-
     public function getUserId(): string
     {
         return $this->user_id;
@@ -25,6 +24,13 @@ class Wallet
         return $this->wallet_id;
     }
 
+    /**
+     * @param array $coins
+     */
+    public function setCoins(array $coins): void
+    {
+        $this->coins = $coins;
+    }
     public function getCoins(): array
     {
         $CoinsJson = [];
