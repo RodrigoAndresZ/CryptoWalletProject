@@ -37,6 +37,9 @@ class GetWalletBalanceControllerTest extends TestCase
         $response->assertExactJson(['error' => 'cartera no encontrado']);
     }
 
+    /**
+     * @test
+     */
 
     public function getWalletBalanceTest()
     {
@@ -46,13 +49,19 @@ class GetWalletBalanceControllerTest extends TestCase
         $coin_id2 = '91';
         $coins2 = new Coin($coin_id2, 'BTC', 'Bitcoin', 2, 30000);
 
+//        $this->walletRepository
+//            ->expects('findWalletById')
+//            ->with($wallet_id)
+//            ->andReturn(new Wallet('1', [
+//                $coins,
+//                $coins2
+//            ]));
+        $test_wallet = new Wallet('1');
+        $test_wallet->setCoins(array($coins,$coins2));
         $this->walletRepository
             ->expects('findWalletById')
             ->with($wallet_id)
-            ->andReturn(new Wallet('1', [
-                $coins,
-                $coins2
-            ]));
+            ->andReturn($test_wallet);
 
         $response = $this->get("/api/wallet/$wallet_id/balance");
         $response->assertOk();
