@@ -13,5 +13,7 @@ interface WalletDataSource
     public function findWalletById(string $wallet_id): ?Wallet;
 
 
-    public function addCoinInWallet(string $walletId, Coin $coin): void;
+    public function addCoinToWallet(string $walletId, Coin $coin): void;
+
+    public function SellCoinWallet(string $wallet_id,Coin $coin, float $newUsdValue,string $amountUsd): void;
 }

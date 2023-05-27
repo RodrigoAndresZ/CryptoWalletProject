@@ -33,6 +33,11 @@ class CreateWalletService
     }
     public function executeAddCoinInWallet(string $wallet_id, Coin $coin): void
     {
-        $this->WalletDataSource->addCoinInWallet($wallet_id, $coin);
+        $this->WalletDataSource->addCoinToWallet($wallet_id, $coin);
+    }
+
+    public function executeSellCoinWallet(string $wallet_id,Coin $coin, float $newUsdValue,string $amountUsd):void
+    {
+        $this->WalletDataSource->sellCoinWallet($wallet_id, $coin, $newUsdValue, $amountUsd);
     }
 }

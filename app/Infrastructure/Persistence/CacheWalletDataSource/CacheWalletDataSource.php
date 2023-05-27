@@ -37,14 +37,14 @@ class CacheWalletDataSource implements WalletDataSource
     }
 
 
-    public function addCoinInWallet(string $walletId, Coin $coin): void
+    public function addCoinToWallet(string $wallet_id, Coin $coin): void
     {
-        $wallet = $this->cache->get('wallet_' . $walletId);
+        $wallet = $this->cache->get('wallet_' . $wallet_id);
         $coinPosition = 0;
         $esta = false;
 
         foreach ($wallet['coins'] as $coinCache) {
-            if ($coinCache['coinId'] == $coin->getName()) {
+            if ($coinCache['name'] == $coin->getName()) {
                 $Amount = $coinCache['amount'] + $coin->getAmount();
                 $coin->setAmount($Amount);
                 $wallet['coins'][$coinPosition] = $coin->getJson();
@@ -53,12 +53,29 @@ class CacheWalletDataSource implements WalletDataSource
             $coinPosition++;
         }
         if (!$esta) {
-            $wallet = new Wallet($walletId);
+            $wallet = new Wallet($wallet_id);
             $wallet->addCoin($coin);
             $wallet['coins'][$coinPosition] = $coin->getJson();
             $esta = true;
         }
 
-        $this->cache->put('wallet_' . $walletId, $wallet);
+        $this->cache->put('wallet_' . $wallet_id, $wallet);
+    }
+
+
+    public function SellCoinWallet(string $wallet_id,Coin $coin, float $newUsdValue,string $amountUsd): void
+    {
+        if ($this->cache->has('wallet_' . $wallet_id)) {
+            $wallet = $this->cache->get('wallet_' . $wallet_id);
+            $coinPosition = 0;
+            foreach ($wallet['coins'] as $coinItem) {
+                if (strcmp($coinItem['name'], $coin->getName()) == 0) {
+                    $wallet['coins'][$coinPosition]['amount'] -= floatval($amountUsd) / $newUsdValue;
+                    $this->cache->put('wallet_' . $wallet_id, $wallet);
+                    break;
+                }
+                $coinPosition++;
+            }
+        }
     }
 }

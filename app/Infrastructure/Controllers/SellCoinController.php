@@ -2,24 +2,24 @@
 
 namespace App\Infrastructure\Controllers;
 
-use App\Application\BuyCoinService;
+use App\Application\SellCoinService;
 use App\Application\CreateWalletService;
 use App\Infrastructure\Persistence\ApiCoinDataSource\ApiCoinRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 
-class BuyCoinController extends BaseController
+class SellCoinController extends BaseController
 {
-    private BuyCoinService $buyCoinService;
+    private SellCoinService $sellCoinService;
     private CreateWalletService $createWalletService;
 
 
 
 
-    public function __construct(BuyCoinService $buyCoinService, CreateWalletService $createWalletService)
+    public function __construct(SellCoinService $sellCoinService, CreateWalletService $createWalletService)
     {
-        $this->buyCoinService = $buyCoinService;
+        $this->sellCoinService = $sellCoinService;
         $this->createWalletService = $createWalletService;
     }
 
@@ -32,7 +32,7 @@ class BuyCoinController extends BaseController
         $wallet_id = $jsonData['wallet_id'];
         $amountUsd = $jsonData['amount_usd'];
 
-        $coin = $this->buyCoinService->execute($coinId, $amountUsd);
+        $coin = $this->sellCoinService->execute($coinId, $amountUsd);
 
         if ($coin === null) {
             return response()->json([
@@ -47,9 +47,14 @@ class BuyCoinController extends BaseController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $this->createWalletService->executeAddCoinInWallet($wallet->getWalletId(), $coin);
+        $this->createWalletService->executeSellCoinWallet(
+            $wallet->getWalletId(),
+            $coin,
+            $this->sellCoinService->executeActualPrice($coinId),
+            $amountUsd
+        );
         return response()->json([
-            'exito' => 'moneda comprada correctamente'
+            'exito' => 'moneda vendida correctamente',
         ], Response::HTTP_OK);
     }
 }
