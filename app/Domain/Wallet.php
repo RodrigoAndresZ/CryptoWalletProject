@@ -9,14 +9,10 @@ class Wallet
     private array $coins;
 
 
-    public function __construct(
-        string $user_id,
-        string $wallet_id,
-        array $coins
-    ) {
-        $this->user_id = $user_id;
+    public function __construct(string $wallet_id)
+    {
         $this->wallet_id = $wallet_id;
-        $this->coins = $coins;
+        $this->coins = [];
     }
 
 
@@ -51,16 +47,7 @@ class Wallet
     {
         array_push($this->coins, $coin);
     }
-    public function deleteCoin(Coin $coin): void
-    {
-        for ($i = 0; $i < sizeof($this->coins); $i++) {
-            if ($this->coins[$i]->getCoinId() == $coin->getCoinId()) {
-                unset($this->coins[$i]);
-                return;
-            }
-        }
-        return;
-    }
+
     public function updateCoin(Coin $coin): void
     {
         for ($i = 0; $i < sizeof($this->coins); $i++) {

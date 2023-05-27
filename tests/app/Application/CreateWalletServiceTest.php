@@ -2,10 +2,9 @@
 
 namespace app\Application;
 
+use App\Application\DataSource\WalletDataSource;
 use App\Application\Exceptions\UserNotFoundException;
 use App\Application\UserDataSource\UserRepository;
-use App\Application\WalletDataSource\WalletRepository;
-use App\Application\CreateWalletService;
 use App\Domain\User;
 use App\Domain\Wallet;
 use Tests\TestCase;
@@ -13,14 +12,14 @@ use Tests\TestCase;
 class CreateWalletServiceTest extends TestCase
 {
     private UserRepository $userRepository;
-    private WalletRepository $walletRepository;
+    private WalletDataSource $walletRepository;
     private CreateWalletService $createWalletService;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->userRepository = $this->mock(UserRepository::class);
-        $this->walletRepository = $this->mock(WalletRepository::class);
+        $this->walletRepository = $this->mock(WalletDataSource::class);
         $this->createWalletService = new CreateWalletService($this->userRepository, $this->walletRepository);
     }
 

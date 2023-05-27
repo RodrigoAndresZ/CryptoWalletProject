@@ -60,8 +60,9 @@ class Coin
             "coin_id" => $this->coin_id,
             "name" => $this->name,
             "symbol" => $this->symbol,
-            "amount" => $this->amount,
-            "value_usd" => $this->value_usd
+            "value_usd" => $this->value_usd,
+            "amount" => $this->amount
+
         ];
     }
 }

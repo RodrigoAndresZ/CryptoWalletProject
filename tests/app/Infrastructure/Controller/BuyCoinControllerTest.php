@@ -2,15 +2,18 @@
 
 namespace Tests\app\Infrastructure\Controller;
 
+use App\Application\DataSource\WalletDataSource;
 use Mockery;
 use App\Application\DataSource\CoinDataSource;
 use Tests\TestCase;
 use App\Domain\Coin;
+use App\Domain\Wallet;
 use App\Infrastructure\Persistence\CoinLoreDataSource;
 
 class BuyCoinControllerTest extends TestCase
 {
     private CoinDataSource $coinDataSource;
+    private WalletDataSource $walletDataSource;
 
 
     /**
@@ -22,6 +25,10 @@ class BuyCoinControllerTest extends TestCase
         $this->coinDataSource = $this->mock(CoinDataSource::class);
         $this->app->bind(CoinDataSource::class, CoinLoreDataSource::class, function () {
             return $this->coinDataSource;
+        });
+        $this->walletDataSource = $this->mock(WalletDataSource::class);
+        $this->app->bind(WalletDataSource::class, function () {
+            return $this->walletDataSource;
         });
     }
 
@@ -42,12 +49,20 @@ class BuyCoinControllerTest extends TestCase
 
         $this->coinDataSource
             ->shouldReceive('getCoinByName')
-            ->with($coin_id,$amount_usd);
+            ->with($coin_id, $amount_usd);
+
+        $this->walletDataSource
+            ->expects("findWalletById")
+            ->with($wallet_id)
+            ->andReturn(new Wallet($wallet_id));
+
+        $this->walletDataSource
+            ->expects("addCoinInWallet");
 
         $response = $this->postJson('/api/coin/buy', $json);
 
         $response->assertOk();
-        $response->assertJson(['coin_id' => '90','name' => 'Bitcoin','symbol' => 'BTC']);
+        $response->assertExactJson(['exito' => 'moneda comprada correctamente']);
     }
 
 
@@ -68,7 +83,7 @@ class BuyCoinControllerTest extends TestCase
 
         $this->coinDataSource
             ->shouldReceive('getCoinByName')
-            ->with($coin_id,$amount_usd)
+            ->with($coin_id, $amount_usd)
             ->andReturn(null);
 
         $response = $this->postJson('/api/coin/buy', $json);

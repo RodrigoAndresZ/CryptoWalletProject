@@ -2,37 +2,25 @@
 
 namespace App\Infrastructure\Controllers;
 
-use App\Application\DataSource\CoinDataSource;
-use App\Infrastructure\Persistence\CoinLoreDataSource;
+use App\Application\CreateWalletService;
+use App\Infrastructure\Persistence\ApiCoinDataSource\ApiCoinRepository;
+use App\Infrastructure\Service\BuyCoinService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
-use App\Domain\Coin;
-use App\Infrastructure\Controllers\BuyCoinFormRequest;
-use App\Infrastructure\Service\BuyCoinService;
-use App\Application\UserDataSource\UserRepository;
-use App\Application\WalletDataSource\WalletRepository;
-use App\Infrastructure\Persistence\ApiCoinDataSource\ApiCoinRepository;
 use Illuminate\Routing\Controller as BaseController;
 
 class BuyCoinController extends BaseController
 {
     private BuyCoinService $buyCoinService;
-
-    /**
-     * @param BuyCoinService $buyCoinService
-     */
+    private CreateWalletService $createWalletService;
 
 
-    private UserRepository $userDataSource;
 
-    private WalletRepository $walletRepository;
 
-    private ApiCoinRepository $apiCoinRepository;
-
-    public function __construct(BuyCoinService $buyCoinService)
+    public function __construct(BuyCoinService $buyCoinService, CreateWalletService $createWalletService)
     {
         $this->buyCoinService = $buyCoinService;
+        $this->createWalletService = $createWalletService;
     }
 
 
@@ -41,48 +29,27 @@ class BuyCoinController extends BaseController
         $jsonData = $request->json()->all();
 
         $coinId = $jsonData['coin_id'];
-        $walletId = $jsonData['wallet_id'];
+        $wallet_id = $jsonData['wallet_id'];
         $amountUsd = $jsonData['amount_usd'];
 
         $coin = $this->buyCoinService->execute($coinId, $amountUsd);
-
 
         if ($coin === null) {
             return response()->json([
                 'error' => 'El coin id dado no existe'
             ], Response::HTTP_NOT_FOUND);
         }
-        return response()->json([
-            'coin_id' => $coin->getCoinId(),
-            'name' => $coin->getName(),
-            'symbol' => $coin->getSymbol(),
-        ], Response::HTTP_OK);
 
-
-
-        /*// Calcula la cantidad de moneda que se puede comprar
-        $coinPrice = $coin->getValueUsd();
-        $coinAmount = $amountUsd / $coinPrice;
-
-        // Obtiene la wallet desde la caché
-        $wallet = Cache::get('wallet:' . $wallet_id);
-
-        if ($wallet === null) {
-            return response()->json(['error' => 'La wallet no existe'], Response::HTTP_NOT_FOUND);
+        $wallet = $this->createWalletService->executefindWalletById($wallet_id);
+        if (is_null($wallet)) {
+            return response()->json([
+                'error' => 'Wallet con ese ID no fue encontrada'
+            ], Response::HTTP_NOT_FOUND);
         }
 
-        $coins = $wallet['coins'];
-        $coins[$coinId] = $coin->toArray(); // Agrega todos los datos de la moneda al array
-        $coins[$coinId]['amount'] = $coinAmount; // Agrega la cantidad de moneda comprada
-        $wallet['coins'] = $coins;
-
-        Cache::put('wallet:' . $wallet_id, $wallet);
-
+        $this->createWalletService->executeAddCoinInWallet($wallet->getWalletId(), $coin);
         return response()->json([
-            'coin_id' => $coin->getCoinId(),
-            'name' => $coin->getName(),
-            'symbol' => $coin->getSymbol(),
-            'coin_amount' => $coinAmount,
-        ], Response::HTTP_OK);*/
+            'exito' => 'moneda comprada correctamente'
+        ], Response::HTTP_OK);
     }
 }
