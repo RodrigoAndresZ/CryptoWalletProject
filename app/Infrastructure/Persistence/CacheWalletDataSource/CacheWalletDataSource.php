@@ -18,9 +18,11 @@ class CacheWalletDataSource implements WalletDataSource
 
     public function createWallet(): ?string
     {
-        for ($i = 0; $i <= 100; $i++) {
+        for ($i = 0; $i <= 500; $i++) {
             if (!$this->cache->has('wallet_' . $i)) {
                 $wallet = new Wallet('wallet_' . $i);
+
+                $wallet = $wallet->getJson();
                 $this->cache->put('wallet_' . $i, $wallet);
                 return 'wallet_' . $i;
             }
@@ -31,7 +33,7 @@ class CacheWalletDataSource implements WalletDataSource
     public function findWalletById(string $wallet_id): ?Wallet
     {
         if ($this->cache->has('wallet_' . $wallet_id)) {
-            return $this->cache->get('wallet_' . $wallet_id);
+            return new Wallet('wallet_' . $wallet_id);
         }
         return null;
     }
@@ -44,7 +46,7 @@ class CacheWalletDataSource implements WalletDataSource
         $esta = false;
 
         foreach ($wallet['coins'] as $coinCache) {
-            if ($coinCache['name'] == $coin->getName()) {
+            if ($coinCache['coin_id'] == $coin->getCoinId()) {
                 $Amount = $coinCache['amount'] + $coin->getAmount();
                 $coin->setAmount($Amount);
                 $wallet['coins'][$coinPosition] = $coin->getJson();
@@ -53,10 +55,7 @@ class CacheWalletDataSource implements WalletDataSource
             $coinPosition++;
         }
         if (!$esta) {
-            $wallet = new Wallet($wallet_id);
-            $wallet->addCoin($coin);
-            $wallet['coins'][$coinPosition] = $coin->getJson();
-            $esta = true;
+            array_push($wallet['coins'], $coin->getJson());
         }
 
         $this->cache->put('wallet_' . $wallet_id, $wallet);
@@ -69,7 +68,7 @@ class CacheWalletDataSource implements WalletDataSource
             $wallet = $this->cache->get('wallet_' . $wallet_id);
             $coinPosition = 0;
             foreach ($wallet['coins'] as $coinItem) {
-                if (strcmp($coinItem['name'], $coin->getName()) == 0) {
+                if (strcmp($coinItem['coin_id'], $coin->getCoinId()) == 0) {
                     $wallet['coins'][$coinPosition]['amount'] -= floatval($amountUsd) / $newUsdValue;
                     $this->cache->put('wallet_' . $wallet_id, $wallet);
                     break;

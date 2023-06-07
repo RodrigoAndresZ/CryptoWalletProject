@@ -48,7 +48,7 @@ class SellCoinController extends BaseController
         }
 
         $this->createWalletService->executeSellCoinWallet(
-            $wallet->getWalletId(),
+            $wallet_id,
             $coin,
             $this->sellCoinService->executeActualPrice($coinId),
             $amountUsd

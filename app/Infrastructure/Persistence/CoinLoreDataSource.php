@@ -15,7 +15,7 @@ class CoinLoreDataSource implements CoinDataSource
         $response = $response['data'];
         if (!empty($response)) {
             foreach ($response as $coinData) {
-                if ($coinData['name'] === $coin_id) {
+                if ($coinData['id'] === $coin_id) {
                     return new Coin(
                         $coinData['id'],
                         $coinData['symbol'],
@@ -38,7 +38,7 @@ class CoinLoreDataSource implements CoinDataSource
         $response = $response['data'];
         if (!empty($response)) {
             foreach ($response as $coinData) {
-                if ($coinData['name'] === $coin_id) {
+                if ($coinData['id'] === $coin_id) {
                     return $coinData['price_usd'];
                 }
             }

@@ -39,7 +39,7 @@ class BuyCoinControllerTest extends TestCase
 
     public function givenCoinIdToBuyIsCorrect()
     {
-        $coin_id = 'Bitcoin';
+        $coin_id = '90';
         $wallet_id = 'walletPrueba';
         $amount_usd = 0.85;
 
@@ -97,7 +97,7 @@ class BuyCoinControllerTest extends TestCase
      */
     public function ifWalletIdNotFound()
     {
-        $coin_id = 'Ethereum';
+        $coin_id = '80';
         $wallet_id = 'walletPrueba';
         $amount_usd = 0.85;
 
@@ -174,7 +174,7 @@ class BuyCoinControllerTest extends TestCase
     public function testBuyCoinWithMissingWallet()
     {
 
-        $coin_id = 'Bitcoin';
+        $coin_id = '90';
         $amount_usd = 0.85;
 
         $json = ['coin_id' => $coin_id,
@@ -196,7 +196,7 @@ class BuyCoinControllerTest extends TestCase
      */
     public function testBuyCoinWithNoStringWalletId()
     {
-        $coin_id = 'Bitcoin';
+        $coin_id = '90';
         $wallet_id = 42343242423;
         $amount_usd = 0.85;
 
@@ -221,7 +221,7 @@ class BuyCoinControllerTest extends TestCase
     public function testBuyCoinWithMissingAmount()
     {
 
-        $coin_id = 'Bitcoin';
+        $coin_id = '90';
         $wallet_id = 'WalletPrueba';
 
 
@@ -245,7 +245,7 @@ class BuyCoinControllerTest extends TestCase
     public function testBuyCoinWithNoNumberAmount()
     {
 
-        $coin_id = 'Bitcoin';
+        $coin_id = '90';
         $wallet_id = 'WalletPurueba';
         $amount_usd = 'ochenta';
 

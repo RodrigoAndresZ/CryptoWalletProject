@@ -6,6 +6,8 @@ use App\Application\DataSource\WalletDataSource;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
+
 
 class GetWalletController extends BaseController
 {
@@ -26,8 +28,9 @@ class GetWalletController extends BaseController
             ], Response::HTTP_NOT_FOUND);
         }
 
+        $wallet = Cache::get('wallet_' . $wallet_id);
 
         //si se encuentra la wallet devolvemos todos sus datos
-        return response()->json($wallet->getCoins(), Response::HTTP_OK);
+        return response()->json($wallet['coins'], Response::HTTP_OK);
     }
 }

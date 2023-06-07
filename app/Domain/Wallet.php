@@ -12,6 +12,7 @@ class Wallet
     public function __construct(string $wallet_id)
     {
         $this->wallet_id = $wallet_id;
+
         $this->coins = [];
     }
 
@@ -34,12 +35,27 @@ class Wallet
     public function getCoins(): array
     {
         $CoinsJson = [];
+
         foreach ($this->coins as $coin) {
             array_push($CoinsJson, $coin->getJson());
         }
 
         return $CoinsJson;
     }
+
+    public function getJson(): array
+    {
+        $attributes = get_object_vars($this);
+        foreach ($attributes as &$attribute) {
+            if (is_array($attribute)) {
+                foreach ($attribute as &$coin) {
+                    $coin = $coin->getJson();
+                }
+            }
+        }
+        return $attributes;
+    }
+
 
     public function getBalance(): float
     {

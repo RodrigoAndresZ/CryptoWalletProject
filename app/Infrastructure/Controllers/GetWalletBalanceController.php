@@ -2,18 +2,23 @@
 
 namespace App\Infrastructure\Controllers;
 
+use App\Application\BuyCoinService;
+use App\Application\DataSource\CoinDataSource;
 use App\Application\DataSource\WalletDataSource;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 
 class GetWalletBalanceController extends BaseController
 {
     private WalletDataSource $walletRepository;
+    private CoinDataSource $coinDataSource;
 
-    public function __construct(WalletDataSource $walletRepository)
+    public function __construct(WalletDataSource $walletRepository, CoinDataSource $coinDataSource)
     {
         $this->walletRepository = $walletRepository;
+        $this->coinDataSource = $coinDataSource;
     }
 
     public function __invoke(string $wallet_id): JsonResponse
@@ -25,11 +30,18 @@ class GetWalletBalanceController extends BaseController
                 'error' => 'cartera no encontrado'
             ], Response::HTTP_NOT_FOUND);
         }
+        $balance = 0;
 
+        $wallet = Cache::get('wallet_' . $wallet_id);
+
+        foreach ($wallet['coins'] as $coin)
+        {
+            $balance += $this->coinDataSource->getActualValue($coin['coin_id']) * $coin['amount'];
+        }
 
         //si se encuentra la wallet devolvemos todos sus datos
         return response()->json([
-            "balance_usd" => $wallet->getBalance()
+            "balance_usd" => $balance
         ], Response::HTTP_OK);
     }
 }

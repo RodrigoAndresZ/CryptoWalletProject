@@ -47,7 +47,7 @@ class BuyCoinController extends BaseController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $this->createWalletService->executeAddCoinInWallet($wallet->getWalletId(), $coin);
+        $this->createWalletService->executeAddCoinInWallet($wallet_id, $coin);
         return response()->json([
             'exito' => 'moneda comprada correctamente'
         ], Response::HTTP_OK);
