@@ -2,8 +2,12 @@
 
 namespace App\Infrastructure\Providers;
 
+use App\Application\DataSource\CoinDataSource;
 use App\Application\DataSource\UserDataSource;
-use App\DataSource\Database\EloquentUserDataSource;
+use App\Application\DataSource\WalletDataSource;
+use App\Infrastructure\Persistence\CacheWalletDataSource\CacheWalletDataSource;
+use App\Infrastructure\Persistence\CoinLoreDataSource;
+use App\Infrastructure\Persistence\FileUserDataSource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,9 +17,11 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        //
+        $this->app->bind(WalletDataSource::class, CacheWalletDataSource::class);
+        $this->app->bind(UserDataSource::class, FileUserDataSource::class);
+        $this->app->bind(CoinDataSource::class, CoinLoreDataSource::class);
     }
 
     /**

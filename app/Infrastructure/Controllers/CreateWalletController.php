@@ -4,7 +4,7 @@ namespace App\Infrastructure\Controllers;
 
 use App\Application\CreateUserService;
 use App\Application\CreateWalletService;
-use App\Application\Exceptions\UserNotFoundException;
+//use App\Application\Exceptions\UserNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
