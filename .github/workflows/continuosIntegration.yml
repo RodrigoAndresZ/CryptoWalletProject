@@ -18,7 +18,7 @@ jobs:
       run: composer install --ignore-platform-reqs
       
     - name: Run unit tests, Code Sniffer,Mess Detector
-      run: vendor/bin/grumphp
+      run: ./vendor/bin/grumphp run
     
     - name: Generate key
       run: php artisan key:generate
