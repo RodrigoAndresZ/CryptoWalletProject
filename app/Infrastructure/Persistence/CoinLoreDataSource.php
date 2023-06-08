@@ -22,7 +22,6 @@ class CoinLoreDataSource implements CoinDataSource
                         $coinData['name'],
                         $coinData['price_usd'],
                         $amount_usd /  $coinData['price_usd']
-
                     );
                 }
             }
@@ -32,7 +31,8 @@ class CoinLoreDataSource implements CoinDataSource
     }
 
 
-    public function getActualValue(string $coin_id): ?float{
+    public function getActualValue(string $coin_id): ?float
+    {
         $url = self::BASE_URL . "/tickers/";
         $response = $this->makeRequest($url);
         $response = $response['data'];
@@ -44,7 +44,6 @@ class CoinLoreDataSource implements CoinDataSource
             }
         }
         return null;
-
     }
 
 

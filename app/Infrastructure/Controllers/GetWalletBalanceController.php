@@ -32,10 +32,8 @@ class GetWalletBalanceController extends BaseController
         }
         $balance = 0;
 
-        $wallet = Cache::get('wallet_' . $wallet_id);
-
-        foreach ($wallet['coins'] as $coin)
-        {
+        $wallet = $this->walletRepository->getWalletById($wallet_id);
+        foreach ($wallet['coins'] as $coin) {
             $balance += $this->coinDataSource->getActualValue($coin['coin_id']) * $coin['amount'];
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Application;
 
 use App\Application\DataSource\CoinDataSource;
@@ -25,6 +26,4 @@ class SellCoinService
     {
         return $this->coinDataSource->getActualValue($coin_id);
     }
-
-
 }
