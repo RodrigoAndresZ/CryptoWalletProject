@@ -28,8 +28,7 @@ class GetWalletController extends BaseController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $wallet = Cache::get('wallet_' . $wallet_id);
-
+        $wallet = $this->walletRepository->getWalletById($wallet_id);
         //si se encuentra la wallet devolvemos todos sus datos
         return response()->json($wallet['coins'], Response::HTTP_OK);
     }

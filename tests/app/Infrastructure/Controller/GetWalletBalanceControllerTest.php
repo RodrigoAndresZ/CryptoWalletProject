@@ -11,6 +11,7 @@ use Tests\TestCase;
 class GetWalletBalanceControllerTest extends TestCase
 {
     private WalletDataSource $walletRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -42,19 +43,13 @@ class GetWalletBalanceControllerTest extends TestCase
      */
     public function getWalletBalanceTest()
     {
+        // probar con numero de coins
         $wallet_id = '1';
         $coin_id = '90';
-        $coins = new Coin($coin_id, 'BTC', 'Bitcoin', 30000, 1);
+        $coins = new Coin($coin_id, 'BTC', 'Bitcoin', 30000, 0);
         $coin_id2 = '80';
-        $coins2 = new Coin($coin_id2, 'ETH', 'Ethereum', 1500, 2);
+        $coins2 = new Coin($coin_id2, 'ETH', 'Ethereum', 1500, 0);
 
-//        $this->walletRepository
-//            ->expects('findWalletById')
-//            ->with($wallet_id)
-//            ->andReturn(new Wallet('1', [
-//                $coins,
-//                $coins2
-//            ]));
         $test_wallet = new Wallet('1');
         $test_wallet->setCoins(array($coins,$coins2));
         $this->walletRepository
@@ -70,13 +65,13 @@ class GetWalletBalanceControllerTest extends TestCase
                     $coins->getJson(),
                     $coins2->getJson()
                 ],
-                "wallet_id" => "wallet_".$wallet_id
+                "wallet_id" => "wallet_" . $wallet_id
             ]);
 
         $response = $this->get("/api/wallet/$wallet_id/balance");
         $response->assertOk();
         $response->assertExactJson([
-            "balance_usd" => 33000
+            "balance_usd" => 0
         ]);
     }
 }

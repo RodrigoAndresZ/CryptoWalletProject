@@ -7,20 +7,22 @@ use App\Domain\Coin;
 use App\Domain\Wallet;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Tests\TestCase;
+use Mockery;
 
 class GetWalletControllerTest extends TestCase
 {
     private WalletDataSource $walletRepository;
-    protected CacheRepository $cache;
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->walletRepository = $this->mock(WalletDataSource::class);
+        $this->walletRepository = Mockery::mock(WalletDataSource::class);
         $this->app->bind(WalletDataSource::class, function () {
             return $this->walletRepository;
         });
-        $this->cache = $this->app->make(CacheRepository::class);
     }
 
     /**
@@ -54,9 +56,13 @@ class GetWalletControllerTest extends TestCase
                 '1'
             ));
 
-        $wallet = new Wallet('wallet_' . $wallet_id);
-        $wallet = $wallet->getJson();
-        $this->cache->put('wallet_' . $wallet_id, $wallet);
+        $this->walletRepository
+            ->expects('getWalletById')
+            ->with($wallet_id)
+            ->andReturn([
+                "coins" => [],
+                "wallet_id" => "wallet_" . $wallet_id
+            ]);
 
         $response = $this->get("/api/wallet/$wallet_id");
         $response->assertOk();
@@ -78,20 +84,21 @@ class GetWalletControllerTest extends TestCase
                 '1'
             ));
 
-        $wallet = new Wallet('wallet_' . $wallet_id);
-        $wallet->addCoin($coin);
-        $wallet = $wallet->getJson();
-        $this->cache->put('wallet_' . $wallet_id, $wallet);
+        $this->walletRepository
+            ->expects('getWalletById')
+            ->with($wallet_id)
+            ->andReturn([
+                "coins" => [
+                    $coin->getJson()
+                ],
+                "wallet_id" => "wallet_" . $wallet_id
+            ]);
 
         $response = $this->get("/api/wallet/$wallet_id");
         $response->assertOk();
-        $response->assertExactJson([[
-            "amount" => 1,
-            "coin_id" =>  "90",
-            "name" => "Bitcoin",
-            "symbol" => "BTC",
-            "value_usd" => 30000
-        ]]);
+        $response->assertExactJson([
+            $coin->getJson()
+        ]);
     }
 
     /**
@@ -110,28 +117,22 @@ class GetWalletControllerTest extends TestCase
                 '1'
             ));
 
-        $wallet = new Wallet('wallet_' . $wallet_id);
-        $wallet->addCoin($coin);
-        $wallet->addCoin($coin2);
-        $wallet = $wallet->getJson();
-        $this->cache->put('wallet_' . $wallet_id, $wallet);
+        $this->walletRepository
+            ->expects('getWalletById')
+            ->with($wallet_id)
+            ->andReturn([
+                "coins" => [
+                    $coin->getJson(),
+                    $coin2->getJson()
+                ],
+                "wallet_id" => "wallet_" . $wallet_id
+            ]);
 
         $response = $this->get("/api/wallet/$wallet_id");
         $response->assertOk();
-        $response->assertExactJson([[
-                "amount" => 1,
-                "coin_id" =>  "90",
-                "name" => "Bitcoin",
-                "symbol" => "BTC",
-                "value_usd" => 30000
-            ],
-            [
-                "amount" => 3,
-                "coin_id" =>  "80",
-                "name" => "Ethereum",
-                "symbol" => "ETH",
-                "value_usd" => 1500
-            ]
+        $response->assertExactJson([
+            $coin->getJson(),
+            $coin2->getJson()
         ]);
     }
 }
