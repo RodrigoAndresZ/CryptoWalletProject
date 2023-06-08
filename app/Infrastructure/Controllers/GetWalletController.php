@@ -6,8 +6,6 @@ use App\Application\DataSource\WalletDataSource;
 use Barryvdh\Debugbar\Controllers\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
-
 
 class GetWalletController extends BaseController
 {
