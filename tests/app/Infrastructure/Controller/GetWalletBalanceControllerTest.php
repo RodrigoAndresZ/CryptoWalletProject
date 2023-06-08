@@ -46,9 +46,9 @@ class GetWalletBalanceControllerTest extends TestCase
         // probar con numero de coins
         $wallet_id = '1';
         $coin_id = '90';
-        $coins = new Coin($coin_id, 'BTC', 'Bitcoin', 30000, 0);
+        $coins = new Coin($coin_id, 'BTC', 'Bitcoin', 30000, 1);
         $coin_id2 = '80';
-        $coins2 = new Coin($coin_id2, 'ETH', 'Ethereum', 1500, 0);
+        $coins2 = new Coin($coin_id2, 'ETH', 'Ethereum', 1500, 2);
 
         $test_wallet = new Wallet('1');
         $test_wallet->setCoins(array($coins,$coins2));
@@ -71,7 +71,7 @@ class GetWalletBalanceControllerTest extends TestCase
         $response = $this->get("/api/wallet/$wallet_id/balance");
         $response->assertOk();
         $response->assertExactJson([
-            "balance_usd" => 0
+            "balance_usd" => 33000
         ]);
     }
 }

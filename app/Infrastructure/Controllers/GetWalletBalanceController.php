@@ -30,16 +30,18 @@ class GetWalletBalanceController extends BaseController
                 'error' => 'cartera no encontrado'
             ], Response::HTTP_NOT_FOUND);
         }
-        $balance = 0;
+        $balanceActual = 0;
+        $balanceWallet = 0;
 
         $wallet = $this->walletRepository->getWalletById($wallet_id);
         foreach ($wallet['coins'] as $coin) {
-            $balance += $this->coinDataSource->getActualValue($coin['coin_id']) * $coin['amount'];
+            $balanceActual += $this->coinDataSource->getActualValue($coin['coin_id']) * $coin['amount'];
+            $balanceWallet += $coin['value_usd'] * $coin['amount'];
         }
 
         //si se encuentra la wallet devolvemos todos sus datos
         return response()->json([
-            "balance_usd" => $balance
+            "balance_usd" => $balanceWallet
         ], Response::HTTP_OK);
     }
 }
