@@ -31,7 +31,7 @@ class GetWalletBalanceController extends BaseController
             ], Response::HTTP_NOT_FOUND);
         }
         $balanceActual = 0;
-        $balanceCost= 0;
+        $balanceCost = 0;
 
         $wallet = $this->walletRepository->getWalletById($wallet_id);
         foreach ($wallet['coins'] as $coin) {
