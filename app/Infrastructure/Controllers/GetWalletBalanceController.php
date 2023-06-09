@@ -31,17 +31,17 @@ class GetWalletBalanceController extends BaseController
             ], Response::HTTP_NOT_FOUND);
         }
         $balanceActual = 0;
-        $balanceWallet = 0;
+        $balanceCost= 0;
 
         $wallet = $this->walletRepository->getWalletById($wallet_id);
         foreach ($wallet['coins'] as $coin) {
             $balanceActual += $this->coinDataSource->getActualValue($coin['coin_id']) * $coin['amount'];
-            $balanceWallet += $coin['value_usd'] * $coin['amount'];
+            $balanceCost += $coin['value_usd'] * $coin['amount'];
         }
 
         //si se encuentra la wallet devolvemos todos sus datos
         return response()->json([
-            "balance_usd" => $balanceWallet
+            "balance_usd" => $balanceActual - $balanceCost
         ], Response::HTTP_OK);
     }
 }

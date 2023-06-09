@@ -2,15 +2,16 @@
 
 namespace Tests\app\Infrastructure\Controller;
 
+use App\Application\DataSource\CoinDataSource;
 use App\Application\DataSource\WalletDataSource;
 use App\Domain\Coin;
 use App\Domain\Wallet;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Tests\TestCase;
 
 class GetWalletBalanceControllerTest extends TestCase
 {
     private WalletDataSource $walletRepository;
+    private CoinDataSource $coinDataSource;
 
     protected function setUp(): void
     {
@@ -18,6 +19,10 @@ class GetWalletBalanceControllerTest extends TestCase
         $this->walletRepository = $this->mock(WalletDataSource::class);
         $this->app->bind(WalletDataSource::class, function () {
             return $this->walletRepository;
+        });
+        $this->coinDataSource = $this->mock(CoinDataSource::class);
+        $this->app->bind(CoinDataSource::class, function () {
+            return $this->coinDataSource;
         });
     }
 
@@ -68,10 +73,19 @@ class GetWalletBalanceControllerTest extends TestCase
                 "wallet_id" => "wallet_" . $wallet_id
             ]);
 
+        $this->coinDataSource
+            ->expects('getActualValue')
+            ->with($coin_id)
+            ->andReturn(31000);
+        $this->coinDataSource
+            ->expects('getActualValue')
+            ->with($coin_id2)
+            ->andReturn(1800);
+
         $response = $this->get("/api/wallet/$wallet_id/balance");
         $response->assertOk();
         $response->assertExactJson([
-            "balance_usd" => 33000
+            "balance_usd" => 1600
         ]);
     }
 }
