@@ -38,7 +38,7 @@ class CacheWalletDataSource implements WalletDataSource
         return null;
     }
 
-    public function getWalletById(string $wallet_id): ?Wallet
+    public function getWalletDataById(string $wallet_id): ?array
     {
         return $this->cache->get('wallet_' . $wallet_id);
     }

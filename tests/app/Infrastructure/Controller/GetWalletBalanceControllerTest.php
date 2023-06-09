@@ -63,7 +63,7 @@ class GetWalletBalanceControllerTest extends TestCase
             ->andReturn($test_wallet);
 
         $this->walletRepository
-            ->expects('getWalletById')
+            ->expects('getWalletDataById')
             ->with($wallet_id)
             ->andReturn([
                 "coins" => [
