@@ -67,6 +67,7 @@ class CacheWalletDataSource implements WalletDataSource
     }
 
 
+
     public function sellCoinWallet(string $wallet_id, Coin $coin, float $newUsdValue, string $amountUsd): void
     {
         if ($this->cache->has('wallet_' . $wallet_id)) {

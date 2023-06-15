@@ -6,6 +6,8 @@ use App\Application\DataSource\CoinDataSource;
 use App\Application\DataSource\WalletDataSource;
 use App\Domain\Coin;
 use App\Domain\Wallet;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use Mockery;
 use Tests\TestCase;
 
 class GetWalletBalanceControllerTest extends TestCase
@@ -34,13 +36,13 @@ class GetWalletBalanceControllerTest extends TestCase
         $wallet_id = "2";
 
         $this->walletRepository
-            ->expects('findWalletById')
+            ->shouldReceive('findWalletById')
             ->with($wallet_id)
             ->andReturn(null);
 
         $response = $this->get("/api/wallet/$wallet_id/balance");
         $response->assertNotFound();
-        $response->assertExactJson(['error' => 'cartera no encontrado']);
+        $response->assertExactJson(['error' => 'cartera no encontrada']);
     }
 
     /**
@@ -48,23 +50,23 @@ class GetWalletBalanceControllerTest extends TestCase
      */
     public function getWalletBalanceTest()
     {
-        // probar con numero de coins
         $wallet_id = '1';
         $coin_id = '90';
         $coins = new Coin($coin_id, 'BTC', 'Bitcoin', 30000, 1);
         $coin_id2 = '80';
-        $coins2 = new Coin($coin_id2, 'ETH', 'Ethereum', 1500, 2);
+        $coins2 = new Coin($coin_id2, 'ETH', 'Ethereum', 1500, 1);
 
         $test_wallet = new Wallet('1');
-        $test_wallet->setCoins(array($coins,$coins2));
+        $test_wallet->setCoins([$coins, $coins2]);
+
         $this->walletRepository
-            ->expects('findWalletById')
+            ->shouldReceive('findWalletById')
             ->with($wallet_id)
             ->andReturn($test_wallet);
 
-        $this->walletRepository
-            ->expects('getWalletDataById')
-            ->with($wallet_id)
+        $cache = $this->mock(CacheRepository::class);
+        $cache->shouldReceive('get')
+            ->with('wallet_' . $wallet_id)
             ->andReturn([
                 "coins" => [
                     $coins->getJson(),
@@ -72,20 +74,21 @@ class GetWalletBalanceControllerTest extends TestCase
                 ],
                 "wallet_id" => "wallet_" . $wallet_id
             ]);
+        $this->app->instance(CacheRepository::class, $cache);
 
         $this->coinDataSource
-            ->expects('getActualValue')
+            ->shouldReceive('getActualValue')
             ->with($coin_id)
-            ->andReturn(31000);
+            ->andReturn(40000);
         $this->coinDataSource
-            ->expects('getActualValue')
+            ->shouldReceive('getActualValue')
             ->with($coin_id2)
-            ->andReturn(1800);
+            ->andReturn(2000);
 
         $response = $this->get("/api/wallet/$wallet_id/balance");
         $response->assertOk();
         $response->assertExactJson([
-            "balance_usd" => 1600
+            "balance_usd" => 42000
         ]);
     }
 }

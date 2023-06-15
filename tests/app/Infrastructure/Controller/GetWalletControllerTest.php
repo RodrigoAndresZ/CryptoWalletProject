@@ -13,16 +13,16 @@ class GetWalletControllerTest extends TestCase
 {
     private WalletDataSource $walletRepository;
 
-    /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->walletRepository = Mockery::mock(WalletDataSource::class);
-        $this->app->bind(WalletDataSource::class, function () {
-            return $this->walletRepository;
-        });
+        $this->walletRepository = $this->app->instance(WalletDataSource::class, Mockery::mock(WalletDataSource::class));
+    }
+
+    public function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 
     /**
@@ -33,7 +33,7 @@ class GetWalletControllerTest extends TestCase
         $wallet_id = "2";
 
         $this->walletRepository
-            ->expects('findWalletById')
+            ->shouldReceive('findWalletById')
             ->with($wallet_id)
             ->andReturn(null);
 
@@ -50,19 +50,26 @@ class GetWalletControllerTest extends TestCase
         $wallet_id = '1';
 
         $this->walletRepository
-            ->expects('findWalletById')
+            ->shouldReceive('findWalletById')
             ->with($wallet_id)
-            ->andReturn(new Wallet(
-                '1'
-            ));
+            ->andReturn(new Wallet('1'));
 
         $this->walletRepository
-            ->expects('getWalletById')
+            ->shouldReceive('getWalletById')
             ->with($wallet_id)
             ->andReturn([
                 "coins" => [],
                 "wallet_id" => "wallet_" . $wallet_id
             ]);
+
+        $cache = Mockery::mock(CacheRepository::class);
+        $cache->shouldReceive('get')
+            ->with('wallet_' . $wallet_id)
+            ->andReturn([
+                "coins" => [],
+                "wallet_id" => "wallet_" . $wallet_id
+            ]);
+        $this->app->instance(CacheRepository::class, $cache);
 
         $response = $this->get("/api/wallet/$wallet_id");
         $response->assertOk();
@@ -78,14 +85,12 @@ class GetWalletControllerTest extends TestCase
         $coin = new Coin(90, 'BTC', 'Bitcoin', 30000, 1);
 
         $this->walletRepository
-            ->expects('findWalletById')
+            ->shouldReceive('findWalletById')
             ->with($wallet_id)
-            ->andReturn(new Wallet(
-                '1'
-            ));
+            ->andReturn(new Wallet('1'));
 
         $this->walletRepository
-            ->expects('getWalletById')
+            ->shouldReceive('getWalletById')
             ->with($wallet_id)
             ->andReturn([
                 "coins" => [
@@ -93,6 +98,17 @@ class GetWalletControllerTest extends TestCase
                 ],
                 "wallet_id" => "wallet_" . $wallet_id
             ]);
+
+        $cache = Mockery::mock(CacheRepository::class);
+        $cache->shouldReceive('get')
+            ->with('wallet_' . $wallet_id)
+            ->andReturn([
+                "coins" => [
+                    $coin->getJson()
+                ],
+                "wallet_id" => "wallet_" . $wallet_id
+            ]);
+        $this->app->instance(CacheRepository::class, $cache);
 
         $response = $this->get("/api/wallet/$wallet_id");
         $response->assertOk();
@@ -111,14 +127,12 @@ class GetWalletControllerTest extends TestCase
         $coin2 = new Coin(80, 'ETH', 'Ethereum', 1500, 3);
 
         $this->walletRepository
-            ->expects('findWalletById')
+            ->shouldReceive('findWalletById')
             ->with($wallet_id)
-            ->andReturn(new Wallet(
-                '1'
-            ));
+            ->andReturn(new Wallet('1'));
 
         $this->walletRepository
-            ->expects('getWalletById')
+            ->shouldReceive('getWalletById')
             ->with($wallet_id)
             ->andReturn([
                 "coins" => [
@@ -127,6 +141,18 @@ class GetWalletControllerTest extends TestCase
                 ],
                 "wallet_id" => "wallet_" . $wallet_id
             ]);
+
+        $cache = Mockery::mock(CacheRepository::class);
+        $cache->shouldReceive('get')
+            ->with('wallet_' . $wallet_id)
+            ->andReturn([
+                "coins" => [
+                    $coin->getJson(),
+                    $coin2->getJson()
+                ],
+                "wallet_id" => "wallet_" . $wallet_id
+            ]);
+        $this->app->instance(CacheRepository::class, $cache);
 
         $response = $this->get("/api/wallet/$wallet_id");
         $response->assertOk();
